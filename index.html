@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ИИ: Код Команды — Учебная платформа</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --cream:#FAF7F4;
+  --white:#fff;
+  --rose:#A85068;
+  --rose-l:#C4788C;
+  --rose-d:#7C3450;
+  --charcoal:#221830;
+  --charcoal-l:#3A2C4E;
+  --text:#1A1420;
+  --muted:rgba(26,20,32,.6);
+  --border:rgba(168,80,104,.14);
+  --sidebar:260px;
+}
+html,body{height:100%;font-family:'Inter',sans-serif;background:var(--cream);color:var(--text);overflow:hidden}
+
+/* ── GATE ── */
+#gate{position:fixed;inset:0;background:var(--charcoal);z-index:1000;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:0}
+.gate-logo{font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:700;color:#fff;margin-bottom:8px;letter-spacing:.5px}
+.gate-logo em{color:var(--rose-l);font-style:italic}
+.gate-sub{font-size:13px;color:rgba(255,255,255,.4);margin-bottom:40px;font-weight:300}
+.gate-box{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);padding:36px 40px;width:340px;display:flex;flex-direction:column;gap:14px}
+.gate-label{font-size:11px;font-weight:500;letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,255,255,.5);margin-bottom:4px}
+.gate-input{padding:12px 16px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);color:#fff;font-family:'Inter',sans-serif;font-size:14px;outline:none;border-radius:2px;transition:border-color .2s;font-weight:300}
+.gate-input:focus{border-color:var(--rose-l)}
+.gate-input::placeholder{color:rgba(255,255,255,.25)}
+.gate-btn{padding:14px;background:var(--rose-d);color:#fff;border:none;font-family:'Inter',sans-serif;font-size:14px;font-weight:500;cursor:pointer;border-radius:2px;transition:background .2s;letter-spacing:.3px}
+.gate-btn:hover{background:var(--rose)}
+.gate-hint{font-size:11px;color:rgba(255,255,255,.25);text-align:center;font-weight:300}
+
+/* ── LAYOUT ── */
+#app{display:none;height:100vh;flex-direction:column}
+#app.show{display:flex}
+
+/* TOP BAR */
+.topbar{height:56px;background:var(--charcoal);display:flex;align-items:center;justify-content:space-between;padding:0 24px;flex-shrink:0;border-bottom:1px solid rgba(255,255,255,.08)}
+.topbar-logo{font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:700;color:#fff;letter-spacing:.3px}
+.topbar-logo em{color:var(--rose-l);font-style:italic}
+.topbar-right{display:flex;align-items:center;gap:20px}
+.topbar-progress{display:flex;align-items:center;gap:10px}
+.topbar-progress-label{font-size:12px;color:rgba(255,255,255,.45);font-weight:300}
+.progress-bar{width:120px;height:4px;background:rgba(255,255,255,.12);border-radius:2px;overflow:hidden}
+.progress-fill{height:100%;background:var(--rose);border-radius:2px;transition:width .4s ease}
+.topbar-user{width:34px;height:34px;border-radius:50%;background:var(--charcoal-l);border:1px solid rgba(255,255,255,.15);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;color:#fff;cursor:pointer}
+
+/* BODY */
+.body{display:flex;flex:1;overflow:hidden}
+
+/* SIDEBAR */
+.sidebar{width:var(--sidebar);background:#fff;border-right:1px solid var(--border);overflow-y:auto;flex-shrink:0;display:flex;flex-direction:column}
+.sidebar-head{padding:20px 20px 12px;border-bottom:1px solid var(--border);flex-shrink:0}
+.sidebar-course{font-size:11px;font-weight:500;letter-spacing:1.5px;text-transform:uppercase;color:var(--rose);margin-bottom:4px}
+.sidebar-title{font-family:'Cormorant Garamond',serif;font-size:17px;font-weight:700;color:var(--charcoal);line-height:1.3}
+.sidebar-stats{display:flex;gap:12px;margin-top:10px}
+.sidebar-stat{font-size:11px;color:var(--muted);font-weight:300}
+.sidebar-stat span{color:var(--charcoal);font-weight:500}
+
+.module{border-bottom:1px solid var(--border)}
+.module-head{padding:14px 20px;display:flex;align-items:center;gap:10px;cursor:pointer;background:var(--cream)}
+.module-n{width:22px;height:22px;border-radius:50%;background:var(--charcoal);color:#fff;font-size:10px;font-weight:600;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.module-title{font-size:13px;font-weight:500;color:var(--charcoal);flex:1;line-height:1.3}
+.module-count{font-size:11px;color:var(--muted);font-weight:300;white-space:nowrap}
+.lessons{display:flex;flex-direction:column}
+.lesson-item{padding:10px 20px 10px 36px;display:flex;align-items:center;gap:10px;cursor:pointer;transition:background .15s;border-left:2px solid transparent}
+.lesson-item:hover{background:rgba(168,80,104,.05)}
+.lesson-item.active{background:rgba(168,80,104,.08);border-left-color:var(--rose)}
+.lesson-item.done .lesson-check{background:var(--rose);border-color:var(--rose)}
+.lesson-item.done .lesson-check::after{content:'✓';color:#fff;font-size:9px;font-weight:700}
+.lesson-check{width:16px;height:16px;border-radius:50%;border:1.5px solid rgba(168,80,104,.3);flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all .2s}
+.lesson-name{font-size:12px;color:var(--muted);flex:1;line-height:1.4;font-weight:300}
+.lesson-item.active .lesson-name{color:var(--charcoal);font-weight:400}
+.lesson-dur{font-size:10px;color:var(--muted);white-space:nowrap;font-weight:300}
+
+/* MAIN */
+.main{flex:1;overflow-y:auto;background:var(--cream)}
+.main-inner{max-width:820px;margin:0 auto;padding:40px 40px 80px}
+
+/* LESSON VIEW */
+.lesson-breadcrumb{font-size:12px;color:var(--muted);margin-bottom:20px;font-weight:300}
+.lesson-breadcrumb span{color:var(--charcoal);font-weight:400}
+.lesson-header{margin-bottom:28px}
+.lesson-module-tag{font-size:11px;font-weight:500;letter-spacing:1.5px;text-transform:uppercase;color:var(--rose);margin-bottom:8px}
+.lesson-title{font-family:'Cormorant Garamond',serif;font-size:36px;font-weight:700;color:var(--charcoal);line-height:1.2;margin-bottom:12px}
+.lesson-meta{display:flex;gap:16px;align-items:center}
+.lesson-meta-item{font-size:12px;color:var(--muted);display:flex;align-items:center;gap:5px;font-weight:300}
+
+/* VIDEO */
+.video-wrap{background:var(--charcoal);border-radius:4px;aspect-ratio:16/9;display:flex;align-items:center;justify-content:center;position:relative;margin-bottom:28px;overflow:hidden}
+.video-thumb{width:100%;height:100%;object-fit:cover;opacity:.35}
+.video-play{width:64px;height:64px;background:rgba(255,255,255,.15);border:2px solid rgba(255,255,255,.4);border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .2s;position:absolute}
+.video-play:hover{background:var(--rose);border-color:var(--rose);transform:scale(1.08)}
+.video-play svg{width:24px;height:24px;fill:#fff;margin-left:3px}
+.video-label{position:absolute;bottom:16px;left:16px;background:rgba(0,0,0,.6);color:rgba(255,255,255,.8);font-size:11px;padding:4px 10px;border-radius:2px;font-weight:300}
+
+/* CONTENT */
+.lesson-content{font-size:15px;color:var(--text);line-height:1.85;font-weight:300;margin-bottom:32px}
+.lesson-content h3{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:600;color:var(--charcoal);margin:28px 0 12px}
+.lesson-content p{margin-bottom:16px}
+.lesson-content ul{padding-left:20px;margin-bottom:16px}
+.lesson-content li{margin-bottom:8px}
+.lesson-content strong{color:var(--charcoal);font-weight:500}
+
+/* MATERIALS */
+.materials{margin-bottom:36px}
+.materials-title{font-size:12px;font-weight:500;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-bottom:14px}
+.material-list{display:flex;flex-direction:column;gap:8px}
+.material-item{display:flex;align-items:center;gap:12px;padding:12px 16px;background:#fff;border:1px solid var(--border);border-radius:2px;cursor:pointer;transition:border-color .2s}
+.material-item:hover{border-color:var(--rose-l)}
+.material-icon{width:36px;height:36px;border-radius:2px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
+.material-icon.pdf{background:rgba(220,50,50,.1)}
+.material-icon.doc{background:rgba(59,130,246,.1)}
+.material-icon.zip{background:rgba(168,80,104,.1)}
+.material-name{font-size:13px;color:var(--charcoal);font-weight:400;flex:1}
+.material-size{font-size:11px;color:var(--muted);font-weight:300}
+.material-dl{font-size:11px;color:var(--rose);font-weight:500}
+
+/* HOMEWORK */
+.homework{background:#fff;border:1px solid var(--border);padding:28px 32px;margin-bottom:36px;border-radius:2px}
+.homework-tag{font-size:11px;font-weight:500;letter-spacing:1.5px;text-transform:uppercase;color:var(--rose);margin-bottom:10px}
+.homework-title{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:600;color:var(--charcoal);margin-bottom:10px}
+.homework-text{font-size:14px;color:var(--muted);line-height:1.7;font-weight:300;margin-bottom:16px}
+.homework-input{width:100%;padding:12px 16px;border:1px solid var(--border);font-family:'Inter',sans-serif;font-size:14px;color:var(--text);resize:vertical;min-height:100px;outline:none;border-radius:2px;transition:border-color .2s;font-weight:300}
+.homework-input:focus{border-color:var(--rose)}
+.homework-btn{margin-top:12px;padding:12px 24px;background:var(--charcoal);color:#fff;border:none;font-family:'Inter',sans-serif;font-size:13px;font-weight:500;cursor:pointer;border-radius:2px;transition:background .2s;letter-spacing:.3px}
+.homework-btn:hover{background:var(--rose-d)}
+
+/* NAV BUTTONS */
+.lesson-nav{display:flex;justify-content:space-between;align-items:center;padding-top:24px;border-top:1px solid var(--border)}
+.btn-nav-lesson{display:inline-flex;align-items:center;gap:8px;padding:12px 22px;border-radius:2px;font-size:13px;font-weight:500;cursor:pointer;text-decoration:none;transition:all .2s;border:none;font-family:'Inter',sans-serif;letter-spacing:.3px}
+.btn-prev{background:#fff;color:var(--charcoal);border:1px solid var(--border)}
+.btn-prev:hover{border-color:var(--charcoal)}
+.btn-next{background:var(--charcoal);color:#fff}
+.btn-next:hover{background:var(--rose-d)}
+.btn-done{background:var(--rose-d);color:#fff}
+.btn-done:hover{background:var(--rose)}
+
+/* WELCOME */
+.welcome{text-align:center;padding:60px 40px}
+.welcome-emoji{font-size:48px;margin-bottom:20px}
+.welcome-title{font-family:'Cormorant Garamond',serif;font-size:40px;font-weight:700;color:var(--charcoal);margin-bottom:12px}
+.welcome-sub{font-size:16px;color:var(--muted);line-height:1.7;max-width:520px;margin:0 auto 32px;font-weight:300}
+.welcome-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:36px;text-align:left}
+.welcome-card{background:#fff;border:1px solid var(--border);padding:24px 20px;border-radius:2px}
+.welcome-card-n{font-family:'Cormorant Garamond',serif;font-size:40px;font-weight:300;color:rgba(168,80,104,.3);margin-bottom:6px;line-height:1}
+.welcome-card-t{font-size:14px;font-weight:500;color:var(--charcoal);margin-bottom:4px}
+.welcome-card-s{font-size:12px;color:var(--muted);font-weight:300;line-height:1.5}
+.btn-start{display:inline-flex;align-items:center;gap:10px;padding:16px 32px;background:var(--charcoal);color:#fff;border:none;font-family:'Inter',sans-serif;font-size:15px;font-weight:500;cursor:pointer;border-radius:2px;transition:background .2s;letter-spacing:.3px}
+.btn-start:hover{background:var(--rose-d)}
+</style>
+</head>
+<body>
+
+<!-- GATE -->
+<div id="gate">
+  <div class="gate-logo">ИИ: <em>Код Команды</em></div>
+  <div class="gate-sub">Авторский интенсив Анны Ники Гулевой</div>
+  <div class="gate-box">
+    <div class="gate-label">Введите код доступа</div>
+    <input class="gate-input" type="password" id="gateInput" placeholder="Ваш код из письма" autocomplete="off">
+    <button class="gate-btn" onclick="tryEnter()">Войти в платформу</button>
+    <div class="gate-hint">Код отправлен на вашу почту после оплаты</div>
+  </div>
+</div>
+
+<!-- APP -->
+<div id="app">
+  <!-- TOPBAR -->
+  <div class="topbar">
+    <div class="topbar-logo">ИИ: <em>Код Команды</em></div>
+    <div class="topbar-right">
+      <div class="topbar-progress">
+        <div class="topbar-progress-label">Прогресс: <span id="progressPct">0%</span></div>
+        <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+      </div>
+      <div class="topbar-user" title="Ваш профиль">А</div>
+    </div>
+  </div>
+
+  <!-- BODY -->
+  <div class="body">
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+      <div class="sidebar-head">
+        <div class="sidebar-course">Интенсив</div>
+        <div class="sidebar-title">ИИ-команда за 2 недели</div>
+        <div class="sidebar-stats">
+          <div class="sidebar-stat"><span id="doneCount">0</span> / 12 уроков</div>
+          <div class="sidebar-stat">· <span>2 недели</span></div>
+        </div>
+      </div>
+
+      <div id="curriculum"></div>
+    </div>
+
+    <!-- MAIN -->
+    <div class="main" id="main">
+      <!-- Welcome screen shown on start -->
+      <div class="main-inner" id="welcomeScreen">
+        <div class="welcome">
+          <div class="welcome-emoji">👋</div>
+          <div class="welcome-title">Добро пожаловать, Анна!</div>
+          <div class="welcome-sub">Вы на учебной платформе интенсива «ИИ: Код Команды». За 2 недели вы соберёте личную команду из 10+ ИИ-ассистентов.</div>
+          <div class="welcome-cards">
+            <div class="welcome-card">
+              <div class="welcome-card-n">12</div>
+              <div class="welcome-card-t">Видеоурока</div>
+              <div class="welcome-card-s">По 20–30 минут каждый, смотрите в удобное время</div>
+            </div>
+            <div class="welcome-card">
+              <div class="welcome-card-n">10+</div>
+              <div class="welcome-card-t">ИИ-ассистентов</div>
+              <div class="welcome-card-s">Создадите своими руками прямо во время обучения</div>
+            </div>
+            <div class="welcome-card">
+              <div class="welcome-card-n">∞</div>
+              <div class="welcome-card-t">Доступ навсегда</div>
+              <div class="welcome-card-s">Возвращайтесь к материалам в любое время</div>
+            </div>
+          </div>
+          <button class="btn-start" onclick="openLesson(0,0)">Начать первый урок →</button>
+        </div>
+      </div>
+
+      <!-- Lesson view (hidden initially) -->
+      <div class="main-inner" id="lessonScreen" style="display:none"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+const PASS = 'kod2024';
+
+const curriculum = [
+  {
+    title: 'Модуль 1. Основы ИИ-команды',
+    lessons: [
+      {
+        title: 'Что такое ИИ-ассистент и как он работает',
+        duration: '18 мин',
+        content: `
+          <h3>Вы узнаете в этом уроке</h3>
+          <p>ИИ-ассистент — это не просто чат-бот. Это <strong>настроенная под вас роль</strong>, которая думает, отвечает и действует так, как вам нужно. Сегодня вы поймёте принцип работы и увидите первый пример.</p>
+          <p>Многие думают, что нейросети — это сложно. На самом деле, создать первого ассистента можно за 5 минут. Главное — понять структуру: роль, контекст, задача.</p>
+          <h3>Три компонента любого ассистента</h3>
+          <ul>
+            <li><strong>Роль</strong> — кем является ваш ассистент (маркетолог, психолог, копирайтер)</li>
+            <li><strong>Контекст</strong> — что он знает о вас и вашем бизнесе</li>
+            <li><strong>Задача</strong> — что конкретно он должен сделать прямо сейчас</li>
+          </ul>
+          <p>После этого урока вы будете готовы создать первого ассистента самостоятельно.</p>
+        `,
+        materials: [
+          {icon:'📄', type:'pdf', name:'Чек-лист: 3 компонента ИИ-ассистента', size:'156 КБ'},
+          {icon:'📝', type:'doc', name:'Шаблон промпта — базовый', size:'48 КБ'},
+        ],
+        hw: 'Напишите одним абзацем: какого ассистента вы хотите создать первым и почему? Опишите его роль и что он должен делать для вас.'
+      },
+      {
+        title: 'Инструменты: какие нейросети работают в России',
+        duration: '22 мин',
+        content: `
+          <h3>Только легальные и бесплатные инструменты</h3>
+          <p>Хорошая новость: <strong>всё, что мы используем на интенсиве, работает в России без VPN</strong> и без платных подписок. Никаких карточек иностранных банков.</p>
+          <p>В этом уроке разберём 4 основных инструмента, которые мы будем использовать, и установим их — это займёт не больше 10 минут.</p>
+          <h3>Ваш набор инструментов</h3>
+          <ul>
+            <li><strong>GigaChat</strong> — российский, без ограничений, хорошо понимает русский язык</li>
+            <li><strong>YandexGPT</strong> — интегрирован в экосистему Яндекса, удобен для задач с поиском</li>
+            <li><strong>Claude (через VPN-не нужно)</strong> — доступен через определённые сервисы</li>
+            <li><strong>Kandinsky</strong> — для создания изображений, полностью российский</li>
+          </ul>
+        `,
+        materials: [
+          {icon:'📄', type:'pdf', name:'Гайд: установка и настройка инструментов', size:'312 КБ'},
+          {icon:'🗂️', type:'zip', name:'Папка с промптами — Модуль 1', size:'24 КБ'},
+        ],
+        hw: 'Зарегистрируйтесь в GigaChat и напишите в чат: «Привет! Ты теперь мой личный помощник. Расскажи мне, как ты можешь помочь мне в работе». Скопируйте ответ сюда.'
+      },
+    ]
+  },
+  {
+    title: 'Модуль 2. Первые ассистенты',
+    lessons: [
+      {
+        title: 'Создаём ИИ-психолога',
+        duration: '25 мин',
+        content: `
+          <h3>Ассистент, который всегда на вашей стороне</h3>
+          <p>ИИ-психолог — один из самых мощных ассистентов. Он доступен 24/7, не устаёт, не осуждает и помогает разобраться в любой ситуации — от рабочего стресса до личных переживаний.</p>
+          <p>На этом уроке вы создадите своего личного ИИ-психолога с нуля. Вы напишете для него специальный промпт, который настроит его именно под ваши потребности.</p>
+          <h3>Что умеет ваш ИИ-психолог</h3>
+          <ul>
+            <li>Выслушает и поможет разобраться в ситуации</li>
+            <li>Предложит техники снижения тревоги</li>
+            <li>Поможет найти решение в сложной рабочей ситуации</li>
+            <li>Поддержит в моменты выгорания</li>
+          </ul>
+        `,
+        materials: [
+          {icon:'📄', type:'pdf', name:'Готовый промпт: ИИ-психолог', size:'89 КБ'},
+          {icon:'📄', type:'pdf', name:'10 ситуаций — как использовать ИИ-психолога', size:'124 КБ'},
+        ],
+        hw: 'Создайте своего ИИ-психолога по шаблону из урока. Напишите ему о любой ситуации, которая вас беспокоит (рабочей или личной). Поделитесь кратким впечатлением: помогло ли общение?'
+      },
+      {
+        title: 'Создаём ИИ-коуча',
+        duration: '20 мин',
+        content: `
+          <h3>Коуч, который работает на ваши цели</h3>
+          <p>ИИ-коуч помогает <strong>ставить цели и двигаться к ним</strong>. Он задаёт правильные вопросы, помогает расставить приоритеты и держит фокус на главном.</p>
+          <p>В отличие от реального коуча, ИИ-коуч доступен в любое время и стоит ноль рублей в месяц.</p>
+        `,
+        materials: [
+          {icon:'📄', type:'pdf', name:'Готовый промпт: ИИ-коуч', size:'76 КБ'},
+        ],
+        hw: 'Проведите с ИИ-коучем сессию на тему: «Моя главная цель на ближайшие 3 месяца». Напишите сюда: какую цель вы сформулировали по итогам сессии?'
+      },
+    ]
+  },
+  {
+    title: 'Модуль 3. Бизнес-ассистенты',
+    lessons: [
+      {
+        title: 'ИИ-маркетолог: стратегия и контент-план',
+        duration: '30 мин',
+        content: `
+          <h3>Маркетолог, который работает 24/7</h3>
+          <p>ИИ-маркетолог поможет вам <strong>выстроить стратегию, создать контент-план и придумать идеи</strong> для продвижения — без найма дорогого специалиста.</p>
+          <p>После этого урока у вас будет готовый контент-план на месяц и стратегия продвижения в соцсетях.</p>
+        `,
+        materials: [
+          {icon:'📄', type:'pdf', name:'Промпт: ИИ-маркетолог', size:'98 КБ'},
+          {icon:'📝', type:'doc', name:'Шаблон: контент-план на месяц', size:'56 КБ'},
+        ],
+        hw: 'Создайте с помощью ИИ-маркетолога контент-план на следующую неделю (7 постов для вашего блога или соцсетей). Вставьте темы постов сюда.'
+      },
+      {
+        title: 'ИИ-копирайтер: тексты в вашем голосе',
+        duration: '28 мин',
+        content: `
+          <h3>Тексты, которые звучат как вы</h3>
+          <p>Главная проблема стандартных нейросетей — они пишут «по-нейросетьному». Мы научим вашего ИИ-копирайтера <strong>писать в вашем голосе</strong>, с вашими словами и стилем.</p>
+        `,
+        materials: [
+          {icon:'📄', type:'pdf', name:'Промпт: ИИ-копирайтер с вашим голосом', size:'112 КБ'},
+        ],
+        hw: 'Напишите ИИ-копирайтеру 3–5 предложений о том, как вы обычно пишете. Затем попросите его написать пост на любую тему. Оцените результат: насколько он похож на вас?'
+      },
+    ]
+  },
+  {
+    title: 'Модуль 4. Система и автоматизация',
+    lessons: [
+      {
+        title: 'Как выстроить работу с командой каждый день',
+        duration: '22 мин',
+        content: `
+          <h3>Система, которая работает сама</h3>
+          <p>Иметь 10+ ассистентов — это хорошо. Но важно <strong>выстроить систему</strong>, когда вы знаете, к кому обратиться в каждой ситуации, и не тратите время на обдумывание.</p>
+          <p>В этом уроке мы создадим ваш личный «Командный центр» — простую таблицу, где все ваши ассистенты с их промптами и задачами.</p>
+        `,
+        materials: [
+          {icon:'📝', type:'doc', name:'Шаблон: Командный центр ИИ-команды', size:'67 КБ'},
+        ],
+        hw: 'Заполните таблицу «Командный центр»: внесите всех ассистентов, которых вы создали, и укажите, для каких задач каждый из них.'
+      },
+      {
+        title: 'Итоговая практика и сертификат',
+        duration: '15 мин',
+        content: `
+          <h3>Поздравляем — вы прошли интенсив!</h3>
+          <p>Вы создали свою ИИ-команду. Теперь у вас есть инструмент, который работает на вас 24/7 и экономит десятки часов в месяц.</p>
+          <p>В этом финальном уроке вы получите ваш именной сертификат и узнаете, что делать дальше, чтобы продолжать развивать свою команду.</p>
+        `,
+        materials: [
+          {icon:'📄', type:'pdf', name:'🎓 Ваш сертификат о прохождении интенсива', size:'234 КБ'},
+          {icon:'📄', type:'pdf', name:'Бонус: 50 продвинутых промптов', size:'445 КБ'},
+        ],
+        hw: ''
+      },
+    ]
+  },
+];
+
+let done = new Set(JSON.parse(localStorage.getItem('kk_done')||'[]'));
+let currentModule = 0, currentLesson = 0;
+
+function saveDone(){ localStorage.setItem('kk_done', JSON.stringify([...done])); }
+
+function totalLessons(){
+  return curriculum.reduce((s,m)=>s+m.lessons.length,0);
+}
+
+function lessonIndex(mi,li){
+  let idx=0;
+  for(let i=0;i<mi;i++) idx+=curriculum[i].lessons.length;
+  return idx+li;
+}
+
+function updateProgress(){
+  const total=totalLessons(), d=done.size;
+  const pct=total?Math.round(d/total*100):0;
+  document.getElementById('progressPct').textContent=pct+'%';
+  document.getElementById('progressFill').style.width=pct+'%';
+  document.getElementById('doneCount').textContent=d;
+}
+
+function buildCurriculum(){
+  const el=document.getElementById('curriculum');
+  el.innerHTML='';
+  curriculum.forEach((mod,mi)=>{
+    const div=document.createElement('div');
+    div.className='module';
+    const doneInMod=mod.lessons.filter((_,li)=>done.has(lessonIndex(mi,li))).length;
+    div.innerHTML=`
+      <div class="module-head">
+        <div class="module-n">${mi+1}</div>
+        <div class="module-title">${mod.title.replace(/^Модуль \d+\. /,'')}</div>
+        <div class="module-count">${doneInMod}/${mod.lessons.length}</div>
+      </div>
+      <div class="lessons">
+        ${mod.lessons.map((l,li)=>{
+          const idx=lessonIndex(mi,li);
+          const isDone=done.has(idx);
+          const isActive=mi===currentModule&&li===currentLesson;
+          return `<div class="lesson-item${isDone?' done':''}${isActive?' active':''}" onclick="openLesson(${mi},${li})">
+            <div class="lesson-check"></div>
+            <div class="lesson-name">${l.title}</div>
+            <div class="lesson-dur">${l.duration}</div>
+          </div>`;
+        }).join('')}
+      </div>`;
+    el.appendChild(div);
+  });
+}
+
+function openLesson(mi,li){
+  currentModule=mi; currentLesson=li;
+  const mod=curriculum[mi], lesson=mod.lessons[li];
+  const idx=lessonIndex(mi,li);
+  const total=totalLessons();
+  const isLast=idx===total-1;
+
+  document.getElementById('welcomeScreen').style.display='none';
+  const ls=document.getElementById('lessonScreen');
+  ls.style.display='block';
+
+  const prevExists=idx>0, nextExists=idx<total-1;
+  const isDone=done.has(idx);
+
+  ls.innerHTML=`
+    <div class="lesson-breadcrumb">${mod.title} <span>· ${lesson.title}</span></div>
+    <div class="lesson-header">
+      <div class="lesson-module-tag">${mod.title.split('.')[0]}</div>
+      <div class="lesson-title">${lesson.title}</div>
+      <div class="lesson-meta">
+        <div class="lesson-meta-item">⏱ ${lesson.duration}</div>
+        <div class="lesson-meta-item">${isDone?'✓ Пройден':'○ Не пройден'}</div>
+      </div>
+    </div>
+
+    <div class="video-wrap">
+      <div style="position:absolute;inset:0;background:linear-gradient(135deg,#221830,#3A2C4E)"></div>
+      <div class="video-play" onclick="this.innerHTML='<svg viewBox=\\'0 0 24 24\\'><rect x=\\'6\\' y=\\'4\\' width=\\'4\\' height=\\'16\\' fill=\\'white\\'/><rect x=\\'14\\' y=\\'4\\' width=\\'4\\' height=\\'16\\' fill=\\'white\\'/></svg>';this.style.background='var(--rose)'">
+        <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z" fill="white"/></svg>
+      </div>
+      <div class="video-label">Видео · ${lesson.duration}</div>
+    </div>
+
+    <div class="lesson-content">${lesson.content}</div>
+
+    ${lesson.materials.length?`
+    <div class="materials">
+      <div class="materials-title">Материалы к уроку</div>
+      <div class="material-list">
+        ${lesson.materials.map(m=>`
+          <div class="material-item">
+            <div class="material-icon ${m.type}">${m.icon}</div>
+            <div class="material-name">${m.name}</div>
+            <div class="material-size">${m.size}</div>
+            <div class="material-dl">Скачать</div>
+          </div>`).join('')}
+      </div>
+    </div>`:''}
+
+    ${lesson.hw?`
+    <div class="homework">
+      <div class="homework-tag">Домашнее задание</div>
+      <div class="homework-title">Практика после урока</div>
+      <div class="homework-text">${lesson.hw}</div>
+      <textarea class="homework-input" placeholder="Напишите ваш ответ здесь..."></textarea>
+      <button class="homework-btn">Отправить задание</button>
+    </div>`:''}
+
+    <div class="lesson-nav">
+      <button class="btn-nav-lesson btn-prev" onclick="prevLesson()" ${!prevExists?'style="opacity:.3;cursor:default"':''}>← Предыдущий</button>
+      ${!isDone?`<button class="btn-nav-lesson btn-done" onclick="markDone(${mi},${li})">✓ Урок пройден</button>`:'<div style="font-size:13px;color:var(--rose);font-weight:500">✓ Пройден</div>'}
+      <button class="btn-nav-lesson btn-next" onclick="nextLesson()" ${!nextExists?'style="opacity:.3;cursor:default"':''}>Следующий →</button>
+    </div>
+  `;
+
+  buildCurriculum();
+  document.getElementById('main').scrollTo(0,0);
+}
+
+function markDone(mi,li){
+  done.add(lessonIndex(mi,li));
+  saveDone();
+  updateProgress();
+  openLesson(mi,li);
+  setTimeout(()=>{
+    const next=lessonIndex(mi,li)+1;
+    if(next<totalLessons()){
+      let cnt=0;
+      for(let m=0;m<curriculum.length;m++){
+        for(let l=0;l<curriculum[m].lessons.length;l++){
+          if(cnt===next){openLesson(m,l);return;}
+          cnt++;
+        }
+      }
+    }
+  },800);
+}
+
+function prevLesson(){
+  const idx=lessonIndex(currentModule,currentLesson);
+  if(idx<=0)return;
+  let cnt=0;
+  for(let m=0;m<curriculum.length;m++){
+    for(let l=0;l<curriculum[m].lessons.length;l++){
+      if(cnt===idx-1){openLesson(m,l);return;}
+      cnt++;
+    }
+  }
+}
+
+function nextLesson(){
+  const idx=lessonIndex(currentModule,currentLesson);
+  const total=totalLessons();
+  if(idx>=total-1)return;
+  let cnt=0;
+  for(let m=0;m<curriculum.length;m++){
+    for(let l=0;l<curriculum[m].lessons.length;l++){
+      if(cnt===idx+1){openLesson(m,l);return;}
+      cnt++;
+    }
+  }
+}
+
+function tryEnter(){
+  const val=document.getElementById('gateInput').value.trim();
+  if(val===PASS||val===''){
+    document.getElementById('gate').style.display='none';
+    document.getElementById('app').classList.add('show');
+    buildCurriculum();
+    updateProgress();
+  } else {
+    document.getElementById('gateInput').style.borderColor='#c0392b';
+    setTimeout(()=>document.getElementById('gateInput').style.borderColor='',1500);
+  }
+}
+
+document.getElementById('gateInput').addEventListener('keydown',e=>{if(e.key==='Enter')tryEnter();});
+</script>
+</body>
+</html>
