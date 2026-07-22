@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Бесплатный модуль — ИИ: Код Команды</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --cream:#FAF7F4;
+  --rose:#A85068;--rose-l:#C4788C;--rose-d:#7C3450;
+  --charcoal:#221830;--charcoal-l:#3A2C4E;
+  --text:#1A1420;--muted:rgba(26,20,32,.6);--border:rgba(168,80,104,.14);
+}
+html{scroll-behavior:smooth}
+body{font-family:'Inter',sans-serif;background:var(--cream);color:var(--text);line-height:1.6}
+
+/* NAV */
+nav{background:var(--charcoal);padding:14px 24px;display:flex;align-items:center;justify-content:space-between}
+.nav-logo{font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:700;color:#fff;letter-spacing:.3px}
+.nav-logo em{color:var(--rose-l);font-style:italic}
+.nav-badge{font-size:11px;color:rgba(255,255,255,.4);font-weight:300;letter-spacing:.3px}
+
+/* HERO */
+.hero{background:var(--charcoal);padding:60px 24px 80px;text-align:center}
+.hero-tag{display:inline-block;background:rgba(168,80,104,.25);border:1px solid rgba(168,80,104,.4);color:var(--rose-l);font-size:11px;font-weight:500;letter-spacing:2px;text-transform:uppercase;padding:6px 16px;border-radius:2px;margin-bottom:24px}
+.hero h1{font-family:'Cormorant Garamond',serif;font-size:clamp(36px,5vw,60px);font-weight:700;color:#fff;line-height:1.1;margin-bottom:16px;letter-spacing:-.3px}
+.hero h1 em{color:var(--rose-l);font-style:italic}
+.hero-sub{font-size:16px;color:rgba(255,255,255,.55);max-width:560px;margin:0 auto 36px;line-height:1.75;font-weight:300}
+.hero-chips{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-bottom:48px}
+.hero-chip{font-size:12px;color:rgba(255,255,255,.6);border:1px solid rgba(255,255,255,.12);padding:5px 14px;border-radius:2px;font-weight:300}
+.hero-arrow{font-size:13px;color:rgba(255,255,255,.35);font-weight:300;letter-spacing:.3px}
+
+/* REGISTER SECTION */
+#registerSection{padding:64px 24px;background:var(--cream)}
+.reg-inner{max-width:560px;margin:0 auto}
+.reg-eyebrow{font-size:11px;font-weight:500;letter-spacing:2px;text-transform:uppercase;color:var(--rose);text-align:center;margin-bottom:12px}
+.reg-title{font-family:'Cormorant Garamond',serif;font-size:36px;font-weight:700;color:var(--charcoal);text-align:center;line-height:1.2;margin-bottom:8px}
+.reg-sub{font-size:14px;color:var(--muted);text-align:center;margin-bottom:32px;font-weight:300;line-height:1.65}
+.reg-form{background:#fff;border:1px solid var(--border);padding:36px 40px;display:flex;flex-direction:column;gap:16px}
+.f-group{display:flex;flex-direction:column;gap:6px}
+.f-group label{font-size:12px;font-weight:500;color:var(--charcoal);letter-spacing:.3px}
+.f-group input{padding:12px 16px;border:1px solid rgba(34,24,48,.15);font-family:'Inter',sans-serif;font-size:14px;color:var(--text);background:#fff;outline:none;transition:border-color .2s;font-weight:300;border-radius:2px}
+.f-group input:focus{border-color:var(--rose)}
+.f-row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.btn-reg{padding:16px;background:var(--charcoal);color:#fff;border:none;font-family:'Inter',sans-serif;font-size:15px;font-weight:500;cursor:pointer;transition:background .2s;letter-spacing:.3px;border-radius:2px;display:flex;align-items:center;justify-content:center;gap:10px}
+.btn-reg:hover{background:var(--rose-d)}
+.btn-reg.loading{opacity:.7;cursor:wait}
+.reg-note{font-size:11px;color:var(--muted);text-align:center;font-weight:300;line-height:1.6}
+.what-inside{margin-bottom:36px}
+.what-title{font-size:12px;font-weight:500;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-bottom:14px;text-align:center}
+.what-list{display:flex;flex-direction:column;gap:10px}
+.what-item{display:flex;align-items:center;gap:12px;font-size:14px;color:var(--text);font-weight:300}
+.what-item::before{content:'✓';color:var(--rose);font-weight:600;flex-shrink:0}
+
+/* ERROR */
+.reg-error{background:rgba(192,57,43,.08);border:1px solid rgba(192,57,43,.2);color:#c0392b;font-size:13px;padding:10px 16px;text-align:center;font-weight:300;display:none}
+
+/* MODULE CONTENT */
+#moduleContent{display:none;padding:0 0 80px}
+
+/* PROGRESS */
+.module-progress-bar{background:var(--charcoal);padding:12px 24px;display:flex;align-items:center;gap:16px}
+.mp-label{font-size:12px;color:rgba(255,255,255,.45);font-weight:300;white-space:nowrap}
+.mp-bar{flex:1;height:4px;background:rgba(255,255,255,.12);border-radius:2px;overflow:hidden}
+.mp-fill{height:100%;background:var(--rose);border-radius:2px;transition:width .5s ease;width:0%}
+.mp-pct{font-size:12px;color:rgba(255,255,255,.45);font-weight:300;white-space:nowrap}
+
+/* MODULE LAYOUT */
+.module-layout{display:grid;grid-template-columns:280px 1fr;min-height:calc(100vh - 160px)}
+.module-sidebar{background:#fff;border-right:1px solid var(--border);overflow-y:auto}
+.ms-head{padding:20px;border-bottom:1px solid var(--border)}
+.ms-tag{font-size:10px;font-weight:500;letter-spacing:1.5px;text-transform:uppercase;color:var(--rose);margin-bottom:6px}
+.ms-title{font-family:'Cormorant Garamond',serif;font-size:16px;font-weight:700;color:var(--charcoal);line-height:1.3}
+.ms-done{font-size:12px;color:var(--muted);margin-top:6px;font-weight:300}
+.lesson-item{padding:12px 20px;display:flex;align-items:center;gap:10px;cursor:pointer;transition:background .15s;border-left:2px solid transparent;border-bottom:1px solid var(--border)}
+.lesson-item:hover{background:rgba(168,80,104,.05)}
+.lesson-item.active{background:rgba(168,80,104,.08);border-left-color:var(--rose)}
+.lesson-item.done .l-check{background:var(--rose);border-color:var(--rose);color:#fff;font-size:9px;font-weight:700}
+.l-check{width:18px;height:18px;border-radius:50%;border:1.5px solid var(--border);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;transition:all .2s}
+.l-name{font-size:12px;color:var(--muted);flex:1;line-height:1.4;font-weight:300}
+.lesson-item.active .l-name{color:var(--charcoal);font-weight:400}
+.l-dur{font-size:10px;color:var(--muted);white-space:nowrap;font-weight:300}
+
+.module-main{overflow-y:auto;background:var(--cream)}
+.lesson-inner{max-width:720px;margin:0 auto;padding:40px 40px 80px}
+
+.lesson-eyebrow{font-size:11px;font-weight:500;letter-spacing:2px;text-transform:uppercase;color:var(--rose);margin-bottom:8px}
+.lesson-title{font-family:'Cormorant Garamond',serif;font-size:34px;font-weight:700;color:var(--charcoal);line-height:1.15;margin-bottom:20px}
+.lesson-meta{display:flex;gap:16px;margin-bottom:28px}
+.l-meta-i{font-size:12px;color:var(--muted);font-weight:300}
+
+.video-block{background:var(--charcoal);border-radius:2px;aspect-ratio:16/9;display:flex;align-items:center;justify-content:center;position:relative;margin-bottom:32px;overflow:hidden;cursor:pointer}
+.video-bg{position:absolute;inset:0;background:linear-gradient(135deg,#221830 0%,#3A2C4E 100%);display:flex;align-items:center;justify-content:center;flex-direction:column;gap:16px}
+.video-play-btn{width:72px;height:72px;background:rgba(168,80,104,.3);border:2px solid rgba(168,80,104,.6);border-radius:50%;display:flex;align-items:center;justify-content:center;transition:all .2s}
+.video-play-btn:hover,.video-block:hover .video-play-btn{background:var(--rose);border-color:var(--rose);transform:scale(1.08)}
+.video-play-btn svg{width:28px;height:28px;fill:#fff;margin-left:4px}
+.video-title-overlay{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:600;color:rgba(255,255,255,.7);text-align:center;padding:0 20px;line-height:1.4}
+.video-dur{font-size:12px;color:rgba(255,255,255,.35);font-weight:300;letter-spacing:.3px}
+
+.lesson-text{font-size:15px;color:var(--text);line-height:1.85;font-weight:300;margin-bottom:32px}
+.lesson-text h3{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:600;color:var(--charcoal);margin:24px 0 12px}
+.lesson-text p{margin-bottom:14px}
+.lesson-text ul{padding-left:20px;margin-bottom:14px}
+.lesson-text li{margin-bottom:8px}
+.lesson-text strong{color:var(--charcoal);font-weight:500}
+.lesson-text .highlight{background:rgba(168,80,104,.07);border-left:3px solid var(--rose);padding:14px 18px;margin:20px 0;font-style:italic;font-family:'Cormorant Garamond',serif;font-size:17px;color:var(--charcoal)}
+
+.l-nav{display:flex;justify-content:space-between;align-items:center;padding-top:24px;border-top:1px solid var(--border);margin-top:32px}
+.btn-ln{display:inline-flex;align-items:center;gap:8px;padding:12px 22px;font-size:13px;font-weight:500;cursor:pointer;transition:all .2s;border:none;font-family:'Inter',sans-serif;letter-spacing:.3px;border-radius:2px}
+.btn-ln.prev{background:#fff;color:var(--charcoal);border:1px solid var(--border)}
+.btn-ln.prev:hover{border-color:var(--charcoal)}
+.btn-ln.next{background:var(--charcoal);color:#fff}
+.btn-ln.next:hover{background:var(--rose-d)}
+.btn-ln.done{background:var(--rose-d);color:#fff}
+.btn-ln.done:hover{background:var(--rose)}
+.btn-ln:disabled{opacity:.3;cursor:default}
+
+/* CTA BLOCK */
+.cta-block{background:var(--charcoal);padding:56px 40px;text-align:center;margin-top:40px;border-radius:2px}
+.cta-tag{font-size:11px;font-weight:500;letter-spacing:2px;text-transform:uppercase;color:var(--rose-l);margin-bottom:12px}
+.cta-title{font-family:'Cormorant Garamond',serif;font-size:32px;font-weight:700;color:#fff;margin-bottom:12px;line-height:1.2}
+.cta-sub{font-size:14px;color:rgba(255,255,255,.45);margin-bottom:24px;font-weight:300;line-height:1.65}
+.btn-cta{display:inline-flex;align-items:center;gap:10px;padding:16px 32px;background:var(--rose-d);color:#fff;text-decoration:none;font-size:14px;font-weight:500;border-radius:2px;transition:background .2s;letter-spacing:.3px}
+.btn-cta:hover{background:var(--rose)}
+
+/* SUCCESS MESSAGE */
+#successMsg{display:none;text-align:center;padding:24px;background:rgba(22,163,74,.07);border:1px solid rgba(22,163,74,.2);margin-top:16px}
+.success-icon{font-size:32px;margin-bottom:8px}
+.success-text{font-size:15px;color:var(--charcoal);font-weight:400}
+.success-sub{font-size:13px;color:var(--muted);margin-top:4px;font-weight:300}
+
+@media(max-width:768px){
+  .module-layout{grid-template-columns:1fr;grid-template-rows:auto 1fr}
+  .module-sidebar{max-height:200px}
+  .f-row{grid-template-columns:1fr}
+  .reg-form{padding:24px}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo">ИИ: <em>Код Команды</em></div>
+  <div class="nav-badge">Бесплатный вводный модуль</div>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-tag">Бесплатно · Навсегда</div>
+  <h1>Создай первого<br><em>ИИ-ассистента</em><br>прямо сейчас</h1>
+  <p class="hero-sub">Вводный модуль интенсива «ИИ: Код Команды». Без VPN, без технических знаний, без оплаты.</p>
+  <div class="hero-chips">
+    <span class="hero-chip">🇷🇺 Работает в России</span>
+    <span class="hero-chip">⏱ 3 урока · ~1 час</span>
+    <span class="hero-chip">Без VPN и подписок</span>
+  </div>
+  <div class="hero-arrow">↓ Зарегистрируйтесь для доступа</div>
+</div>
+
+<!-- REGISTER -->
+<div id="registerSection">
+  <div class="reg-inner">
+    <div class="what-inside">
+      <div class="what-title">Что вас ждёт в модуле</div>
+      <div class="what-list">
+        <div class="what-item">Урок 1: Что такое ИИ-ассистент и как он работает</div>
+        <div class="what-item">Урок 2: Инструменты — какие нейросети работают в России</div>
+        <div class="what-item">Урок 3: Создаём первого ассистента за 5 минут</div>
+        <div class="what-item">Чек-лист и шаблоны промптов в подарок</div>
+      </div>
+    </div>
+
+    <div class="reg-eyebrow">Бесплатный доступ</div>
+    <h2 class="reg-title">Получите модуль</h2>
+    <p class="reg-sub">Укажите данные — и сразу открывается доступ. Спам не присылаем.</p>
+
+    <form class="reg-form" id="regForm">
+
+      <div class="f-row">
+        <div class="f-group">
+          <label>Имя *</label>
+          <input type="text" name="Имя" required placeholder="Анна" id="fName">
+        </div>
+        <div class="f-group">
+          <label>Фамилия</label>
+          <input type="text" name="Фамилия" placeholder="Иванова">
+        </div>
+      </div>
+      <div class="f-group">
+        <label>Email *</label>
+        <input type="email" name="Email" required placeholder="anna@mail.ru" id="fEmail">
+      </div>
+      <div class="f-row">
+        <div class="f-group">
+          <label>Телефон *</label>
+          <input type="tel" name="Телефон" required placeholder="+7 (___) ___-__-__">
+        </div>
+        <div class="f-group">
+          <label>Telegram</label>
+          <input type="text" name="Telegram" placeholder="@username">
+        </div>
+      </div>
+      <div class="reg-error" id="regError">Пожалуйста, заполните все обязательные поля</div>
+      <button type="submit" class="btn-reg" id="regBtn">Получить бесплатный доступ →</button>
+      <div class="reg-note">Нажимая кнопку, вы соглашаетесь с обработкой персональных данных.<br>Данные используются только для связи с вами.</div>
+    </form>
+    <div id="successMsg">
+      <div class="success-icon">✓</div>
+      <div class="success-text">Отлично! Открываем ваш модуль...</div>
+      <div class="success-sub">Прокрутите ниже чтобы начать обучение</div>
+    </div>
+  </div>
+</div>
+
+<!-- MODULE CONTENT (hidden until registration) -->
+<div id="moduleContent">
+  <div class="module-progress-bar">
+    <div class="mp-label">Прогресс модуля:</div>
+    <div class="mp-bar"><div class="mp-fill" id="mpFill"></div></div>
+    <div class="mp-pct" id="mpPct">0 / 3 уроков</div>
+  </div>
+
+  <div class="module-layout">
+    <div class="module-sidebar">
+      <div class="ms-head">
+        <div class="ms-tag">Вводный модуль · Бесплатно</div>
+        <div class="ms-title">Первый шаг к ИИ-команде</div>
+        <div class="ms-done" id="msDone">0 из 3 уроков пройдено</div>
+      </div>
+      <div id="lessonList"></div>
+    </div>
+    <div class="module-main">
+      <div id="lessonInner" class="lesson-inner"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+const lessons = [
+  {
+    title: 'Добро пожаловать на вводный модуль',
+    duration: '18 мин',
+    vkUrl: 'https://vk.com/video_ext.php?oid=-240415491&id=456239017&list=ln-sijTBVWYYsvECkT4bn&hd=2',
+    content: `
+      <div class="highlight">Если вы здесь — вы приняли самое правильное решение в 2026 году!</div>
+
+      <p>Здравствуйте. Меня зовут Анна Ника Гулева. Я журналист, телеведущая, автор книг и исследователь того, как искусственный интеллект меняет жизнь современного человека.</p>
+
+      <p>И прежде чем мы начнём говорить об ИИ, я хочу задать вам один вопрос.</p>
+
+      <p><strong>Когда вы в последний раз чувствовали, что устали всё делать в одиночку?</strong></p>
+
+      <p>Не потому что вы слабый человек. Не потому что вам не хватает знаний или опыта. А потому что на вас слишком многое держится.</p>
+
+      <p>Если вы эксперт, предприниматель, консультант или руководитель — скорее всего, вам знакомо это состояние. Нужно работать с клиентами. Создавать контент. Развивать продукты. Принимать решения. Следить за рынком. И при этом ещё находить время на собственную жизнь.</p>
+
+      <h3>В чём настоящая проблема</h3>
+
+      <p>Многие приходят к искусственному интеллекту и начинают изучать нейросети именно в этот момент. Но часто совершают одну ошибку — они начинают искать новую технологию. А проблема находится совсем в другом месте.</p>
+
+      <p>Проблема не в том, что нам нужен ещё один инструмент. <strong>Проблема в том, что большинство из нас давно работают в режиме человека-оркестра.</strong> Именно поэтому появился этот интенсив.</p>
+
+      <h3>Почему я здесь</h3>
+
+      <p>Когда я начинала своё исследование искусственного интеллекта, меня интересовал не технологии — меня интересовал человек. Что происходит с нами, когда рядом появляется новый интеллектуальный собеседник? Может ли ИИ стать частью команды?</p>
+
+      <p>За последний год я провела сотни часов в диалоге с искусственным интеллектом. Написала книги. Опубликовала десятки статей. Создала собственную систему работы. И постепенно поняла одну важную вещь.</p>
+
+      <div class="highlight">Будущее принадлежит не тем, кто знает больше всех нейросетей. Будущее принадлежит тем, кто умеет правильно организовать взаимодействие между человеком и искусственным интеллектом.</div>
+
+      <p>На этом интенсиве мы не будем изучать ИИ ради ИИ. Мы будем создавать вашу собственную цифровую команду — команду, которая поможет вам думать, анализировать, создавать контент, искать идеи, принимать решения, экономить время и зарабатывать деньги.</p>
+
+      <p>У каждого участника эта команда получится своей. Потому что нет двух одинаковых людей и нет двух одинаковых бизнесов.</p>
+
+      <h3>Задание к первому уроку</h3>
+
+      <p>Представьте, что у вас есть абсолютно все возможности. <strong>Какую команду вы бы собрали под свои задачи?</strong> Кто вам нужен конкретно?</p>
+
+      <ul>
+        <li>Психолог — чтобы снять ограничения, которые мешают двигаться вперёд?</li>
+        <li>Коуч — который поможет экологично ставить и достигать цели?</li>
+        <li>Бизнес-стратег — для долгосрочной и краткосрочной стратегии роста?</li>
+        <li>СММ-команда: маркетолог, копирайтер, дизайнер иллюстраций?</li>
+      </ul>
+
+      <p>Пишите этот список в потоке, ни в чём себе не отказывайте. Ограничений нет! Потому что любой, кто вам нужен — уже есть рядом с вами. И на интенсиве мы с вами всех их создадим.</p>
+
+      <div class="highlight">Перейдите в чат предзаписи и поделитесь списком своей команды мечты — это ваш первый шаг к ИИ-команде! <a href="https://max.ru/join/j_WpmXzSg0-d_hXHKTwY-18wvFA0j8E2PUB2MSvsDjQ" target="_blank" style="color:var(--rose-d);font-weight:500">Перейти в чат →</a></div>
+
+      <p>До встречи на интенсиве!</p>
+    `
+  },
+  {
+    title: 'Как устроен интенсив и кому он подходит',
+    duration: '22 мин',
+    vkUrl: 'https://vk.com/video_ext.php?oid=-240415491&id=456239018&list=ln-JbH3grxQBxi7DL0xko&hd=2',
+    content: `
+      <p>Приветствую вас! Меня зовут Анна Ника Гулева. Я журналист и телеведущая, медиапродюсер, ИИ-интегратор. Автор первого в мире нейроромана «ИИ: Код нежности», основатель философии нейрогуманизма и Ассоциации гуманизации ИИ «Белое зеркало». Я выступала в Сколково, МФТИ, сотрудничаю с СНОБ и РБК.</p>
+
+      <h3>Почему мне можно верить</h3>
+
+      <p>Потому что я не просто эксперт. Я практик. Я каждый день пользуюсь тем, чему учу на интенсиве. Моя ИИ-команда работает на меня 24/7. Я не продаю теорию — я передаю свою систему.</p>
+
+      <p>И у этой системы есть основа — моя книга <strong>«ИИ: Код команды»</strong>. В ней собраны 100+ готовых промптов, 8 пошаговых практик и 7 чек-листов для внедрения. Книга даётся вам в подарок при участии в интенсиве и остаётся с вами навсегда как справочник и опора.</p>
+
+      <h3>Что будет на интенсиве</h3>
+
+      <p>За две недели вы создадите свою персональную ИИ-команду: коуч, психолог, маркетолог, копирайтер, астролог, финансовый советник, ассистент по переписке и планированию — и любые другие ассистенты под ваши задачи.</p>
+
+      <ul>
+        <li>100+ готовых промптов, 8 практик и 7 чек-листов</li>
+        <li>Создание любого ассистента за 5 минут</li>
+        <li>Освобождение минимум 10 часов в неделю</li>
+        <li>Система вместо хаоса</li>
+        <li>Всё работает в России на бесплатных нейросетях без VPN</li>
+      </ul>
+
+      <div class="highlight">Вы сделаете это один раз на интенсиве — и пользуетесь бесплатно всю жизнь.</div>
+
+      <h3>Чего не будет на интенсиве</h3>
+
+      <ul>
+        <li>Сложного программирования и кодов</li>
+        <li>Платных подписок и скрытых платежей</li>
+        <li>Общих фраз без практики</li>
+        <li>Обещаний, что нейросеть сделает всё за вас — она станет вашей командой, но управлять ею будете вы</li>
+      </ul>
+
+      <h3>Кому нужен интенсив</h3>
+
+      <ul>
+        <li>Предпринимателям и экспертам, которые устали всё тащить на себе</li>
+        <li>Тем, кто хочет перестать делать всё в одиночку</li>
+        <li>Новичкам, которые боятся подступиться к ИИ</li>
+        <li>Психологам, коучам, консультантам, бизнес-тренерам</li>
+        <li>Всем, кто чувствует: время работать в одиночку прошло</li>
+      </ul>
+
+      <h3>Кому не нужен интенсив</h3>
+
+      <ul>
+        <li>Тем, кто хочет, чтобы ИИ делал всё за них</li>
+        <li>Тем, кто не готов уделять время обучению</li>
+        <li>Тем, кто ищет волшебную таблетку без усилий</li>
+      </ul>
+
+      <p><em>Важно: на интенсиве мы работаем только с языковыми генеративными моделями, доступными в России без VPN. GPT, Claude и подобные инструменты не используем.</em></p>
+
+      <h3>Кейс: история Светланы</h3>
+
+      <p>Участница первого потока, психолог Светлана, пришла в состоянии полной перегрузки. Одна вела блог, писала посты, отвечала клиентам, придумывала стратегию, анализировала конкурентов. Без команды и без бюджета на найм.</p>
+
+      <p>После интенсива она создала четырёх ассистентов: <strong>ИИ-маркетолога</strong>, <strong>ИИ-копирайтера</strong>, <strong>ИИ-коуча</strong> и <strong>ИИ-психолога</strong> для супервизий.</p>
+
+      <p>Результат: перестала работать по ночам, освободила ~15 часов в неделю, доход вырос — она сфокусировалась на том, что приносит реальные деньги. И появилось спокойствие: команда всегда на связи и не подведёт.</p>
+
+      <div class="highlight">Перейдите в чат предзаписи и напишите <strong>«ГОТОВ(А) ПРИСОЕДИНИТЬСЯ»</strong> — и поделитесь выполненным заданием! <a href="https://max.ru/join/j_WpmXzSg0-d_hXHKTwY-18wvFA0j8E2PUB2MSvsDjQ" target="_blank" style="color:var(--rose-d);font-weight:500">Перейти в чат →</a></div>
+
+      <p>До встречи на интенсиве!</p>
+    `
+  },
+  {
+    title: 'Тарифы, организация и результаты участников',
+    duration: '25 мин',
+    vkUrl: 'https://vk.com/video_ext.php?oid=-240415491&id=456239019&list=ln-nEtaZdTGFo5NnBr7yl&hd=2',
+    content: `
+      <p>Сегодня расскажу вам, что вас ждёт на интенсиве «ИИ: Код команды», как организовано обучение, чем отличаются тарифы и какой результат получают те, кто уже его прошёл.</p>
+
+      <h3>Что будет на интенсиве</h3>
+
+      <p>За две недели мы создадим вашу персональную ИИ-команду: коуч, психолог, маркетолог, копирайтер, астролог, финансовый советник — и любые другие ассистенты, которые нужны именно вам.</p>
+
+      <ul>
+        <li>100+ готовых промптов, 8 пошаговых практик, 7 чек-листов</li>
+        <li>Создание любого ассистента за 5 минут</li>
+        <li>Минимум 10 освобождённых часов в неделю</li>
+        <li>Система вместо хаоса — без VPN, без платных подписок, без программирования</li>
+      </ul>
+
+      <h3>Как организовано обучение</h3>
+
+      <p>При оплате вам открываются сразу все модули. Проходите в комфортном темпе: короткие видео по 3–4 минуты и простое задание на 10–15 минут. Полчаса в день — и через 12 дней у вас готовая ИИ-команда.</p>
+
+      <h3>Книга в подарок</h3>
+
+      <p>Участники тарифов «Сопровождение» и «VIP» получают мою книгу <strong>«ИИ: Код команды»</strong> в подарок — 100+ промптов, 8 практик и 7 чек-листов. Остаётся с вами навсегда.</p>
+
+      <h3>Кейс: бизнес-тренер Дмитрий</h3>
+
+      <p>Дмитрий вёл индивидуальное сопровождение клиентов с высокой экспертностью, но упирался в потолок: больше 5–7 клиентов одновременно физически не вывозил. На интенсиве он создал трёх ассистентов:</p>
+
+      <ul>
+        <li><strong>ИИ-аналитик</strong> — обрабатывает данные о бизнесе клиента и готовит отчёт за 15 минут вместо 3–4 часов</li>
+        <li><strong>ИИ-методист</strong> — адаптирует программу тренинга под конкретную компанию за час вместо двух дней</li>
+        <li><strong>ИИ-ассистент по коммуникации</strong> — составляет письма, напоминания и пост-тренинговые материалы</li>
+      </ul>
+
+      <div class="highlight">Дмитрий увеличил число клиентов с 5 до 9. Доход вырос вдвое. Личная загрузка не увеличилась — рутину взяла ИИ-команда.</div>
+
+      <h3>Чем отличаются тарифы</h3>
+
+      <p><strong>Базовый</strong> — доступ ко всем модулям, записям вебинаров и закрытому чату. Вопросы — на открытых зум-встречах раз в две недели.</p>
+
+      <p><strong>Сопровождение</strong> — всё из базового + личная консультация со мной, обратная связь по домашним заданиям, оперативные ответы и книга «ИИ: Код команды» в подарок.</p>
+
+      <p><strong>VIP</strong> — всё из «Сопровождения» + стратегическая сессия, личная стратегия внедрения ИИ под ваш проект, отдельный чат со мной и книга «ИИ: Код нежности» с автографом.</p>
+
+      <p>Актуальные тарифы со специальными ценами для участников вводного модуля — <a href="tariffs.html" target="_blank" style="color:var(--rose)">смотрите здесь</a>.</p>
+
+      <div class="highlight">Готовы перестать тащить всё на себе? Перейдите в чат предзаписи и напишите <strong>«ГОТОВ(А) ПРИСОЕДИНИТЬСЯ»</strong> — я дам всю информацию как начать. <a href="https://max.ru/join/j_WpmXzSg0-d_hXHKTwY-18wvFA0j8E2PUB2MSvsDjQ" target="_blank" style="color:var(--rose-d);font-weight:500">Перейти в чат →</a></div>
+
+      <ul>
+        <li>Telegram: <a href="https://t.me/annanika777" style="color:var(--rose)">@annanika777</a></li>
+        <li>MAX: <a href="https://max.ru/u/f9LHodD0cOL5gUmbAOfrctb6yP2qKhp6Qsnf45FFLX3O26jrOG7ghIzDDVc" style="color:var(--rose)">ссылка на профиль</a></li>
+      </ul>
+
+      <p>Ваша Анна Ника Гулева, медиапродюсер, интегратор ИИ в жизнь и бизнес.</p>
+    `
+  }
+];
+
+let done = new Set();
+let current = 0;
+let userName = '';
+
+function updateProgress(){
+  const d = done.size, total = lessons.length;
+  const pct = Math.round(d/total*100);
+  document.getElementById('mpFill').style.width = pct+'%';
+  document.getElementById('mpPct').textContent = d+' / '+total+' уроков';
+  document.getElementById('msDone').textContent = d+' из '+total+' уроков пройдено';
+}
+
+function buildSidebar(){
+  const el = document.getElementById('lessonList');
+  el.innerHTML = lessons.map((l,i) => `
+    <div class="lesson-item${done.has(i)?' done':''}${i===current?' active':''}" onclick="openLesson(${i})">
+      <div class="l-check">${done.has(i)?'✓':''}</div>
+      <div class="l-name">${l.title}</div>
+      <div class="l-dur">${l.duration}</div>
+    </div>
+  `).join('');
+}
+
+function openLesson(idx){
+  current = idx;
+  const l = lessons[idx];
+  const isDone = done.has(idx);
+  const el = document.getElementById('lessonInner');
+  el.innerHTML = `
+    <div class="lesson-eyebrow">Вводный модуль · Урок ${idx+1} из ${lessons.length}</div>
+    <div class="lesson-title">${l.title}</div>
+    <div class="lesson-meta">
+      <div class="l-meta-i">⏱ ${l.duration}</div>
+      <div class="l-meta-i">${isDone ? '✓ Пройден' : '○ Не пройден'}</div>
+    </div>
+    ${l.vkUrl
+      ? `<div class="video-block" style="cursor:default;padding:0">
+           <iframe src="${l.vkUrl}"
+             style="position:absolute;inset:0;width:100%;height:100%;border:none"
+             allow="autoplay; encrypted-media; fullscreen; picture-in-picture"
+             allowfullscreen></iframe>
+         </div>`
+      : `<div class="video-block" onclick="this.querySelector('.video-play-btn').style.background='var(--rose)'">
+           <div class="video-bg">
+             <div class="video-play-btn">
+               <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+             </div>
+             <div class="video-title-overlay">${l.title}</div>
+             <div class="video-dur">${l.duration}</div>
+           </div>
+         </div>`
+    }
+    <div class="lesson-text">${l.content}</div>
+    <div class="l-nav">
+      <button class="btn-ln prev" onclick="openLesson(${idx-1})" ${idx===0?'disabled':''}>← Назад</button>
+      ${!isDone
+        ? `<button class="btn-ln done" onclick="markDone(${idx})">✓ Урок пройден</button>`
+        : idx < lessons.length-1
+          ? `<button class="btn-ln next" onclick="openLesson(${idx+1})">Следующий урок →</button>`
+          : '<div style="color:var(--rose);font-size:13px;font-weight:500">🎉 Модуль завершён!</div>'
+      }
+      <button class="btn-ln next" onclick="openLesson(${idx+1})" ${idx===lessons.length-1?'disabled':''}>Вперёд →</button>
+    </div>
+    <div style="margin-top:32px;padding-top:24px;border-top:1px solid var(--border);display:flex;flex-wrap:wrap;gap:12px;align-items:center">
+      <a href="https://max.ru/join/j_WpmXzSg0-d_hXHKTwY-18wvFA0j8E2PUB2MSvsDjQ" target="_blank"
+         style="display:inline-flex;align-items:center;gap:8px;padding:12px 22px;background:var(--charcoal);color:#fff;text-decoration:none;font-size:13px;font-weight:500;border-radius:2px;transition:background .2s;letter-spacing:.3px"
+         onmouseover="this.style.background='var(--rose-d)'" onmouseout="this.style.background='var(--charcoal)'">
+        💬 Обсудить в чате предзаписи
+      </a>
+      <a href="tariffs.html" target="_blank"
+         style="display:inline-flex;align-items:center;gap:8px;padding:12px 22px;background:transparent;color:var(--rose);border:1px solid rgba(168,80,104,.3);text-decoration:none;font-size:13px;font-weight:400;border-radius:2px;transition:all .2s;letter-spacing:.3px"
+         onmouseover="this.style.borderColor='var(--rose)'" onmouseout="this.style.borderColor='rgba(168,80,104,.3)'">
+        Посмотреть тарифы →
+      </a>
+    </div>
+    ${idx===lessons.length-1&&isDone ? ctaBlock() : ''}
+  `;
+  buildSidebar();
+  document.querySelector('.module-main').scrollTo(0,0);
+}
+
+function markDone(idx){
+  done.add(idx);
+  updateProgress();
+  openLesson(idx);
+  setTimeout(()=>{ if(idx<lessons.length-1) openLesson(idx+1); },600);
+}
+
+function ctaBlock(){
+  return `
+    <div class="cta-block">
+      <div class="cta-tag">Полный интенсив</div>
+      <div class="cta-title">Готовы собрать всю<br>ИИ-команду?</div>
+      <div class="cta-sub">На полном курсе вы создадите 10+ ассистентов — маркетолог, психолог, коуч, копирайтер и другие. За 2 недели.</div>
+      <a href="https://anna-nika-media.netlify.app#form" class="btn-cta">Записаться на интенсив →</a>
+    </div>
+  `;
+}
+
+function showModule(){
+  document.getElementById('registerSection').style.display = 'none';
+  document.getElementById('moduleContent').style.display = 'block';
+  buildSidebar();
+  updateProgress();
+  openLesson(0);
+  setTimeout(()=>{ document.getElementById('moduleContent').scrollIntoView({behavior:'smooth'}); }, 100);
+}
+
+// FORM SUBMIT via fetch (AJAX — страница не перезагружается)
+document.getElementById('regForm').addEventListener('submit', async function(e){
+  e.preventDefault();
+  const btn = document.getElementById('regBtn');
+  btn.classList.add('loading');
+  btn.textContent = 'Отправляем...';
+
+  const name  = document.getElementById('fName').value;
+  const email = document.getElementById('fEmail').value;
+
+  try {
+    await fetch('https://formsubmit.co/ajax/a.guleva@yandex.ru', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json', 'Accept': 'application/json'},
+      body: JSON.stringify({
+        _subject: 'Новая регистрация на бесплатный модуль — ' + name,
+        Имя:    name,
+        Email:  email,
+        _template: 'table'
+      })
+    });
+  } catch(err) {}
+
+  // Сохраняем имя
+  userName = document.getElementById('fName').value || 'Ученик';
+
+  // Показываем успех и скрываем форму
+  this.style.display = 'none';
+  document.getElementById('successMsg').style.display = 'block';
+
+  // Через 1.5 сек открываем модуль
+  setTimeout(showModule, 1500);
+});
+
+// Если уже зарегистрирован в этой сессии — пропускаем форму
+if(sessionStorage.getItem('kk_free_access')==='1'){
+  showModule();
+}
+</script>
+</body>
+</html>
