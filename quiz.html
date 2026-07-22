@@ -1,0 +1,395 @@
+<title>Тест: Какие ИИ-сотрудники вам нужны — ИИ: КОД КОМАНДЫ</title>
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --rose:#B05870;--rose-d:#7C3450;--rose-l:#CC7A90;
+  --char:#2C2234;--char-l:#3F3050;
+  --bg:#F4F2F4;--white:#fff;
+  --text:#1C1622;--muted:rgba(28,22,34,.55);
+  --border:rgba(44,34,52,.1);
+}
+html,body{min-height:100vh;font-family:system-ui,-apple-system,sans-serif;background:var(--bg);color:var(--text)}
+body{display:flex;flex-direction:column;align-items:center;justify-content:flex-start;padding:0 16px 60px}
+
+/* ── HEADER ── */
+.quiz-header{width:100%;max-width:640px;padding:28px 0 20px;display:flex;flex-direction:column;gap:12px}
+.quiz-brand{font-family:Georgia,serif;font-size:13px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--rose-d)}
+.progress-wrap{display:flex;align-items:center;gap:12px}
+.progress-bar{flex:1;height:4px;background:rgba(44,34,52,.1);border-radius:4px;overflow:hidden}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--rose-d),var(--rose-l));border-radius:4px;transition:width .5s cubic-bezier(.4,0,.2,1)}
+.progress-label{font-size:12px;color:var(--muted);white-space:nowrap;min-width:52px;text-align:right}
+
+/* ── CARD ── */
+.card{width:100%;max-width:640px;background:var(--white);border-radius:24px;padding:40px 40px 36px;box-shadow:0 4px 32px rgba(44,34,52,.08);border:1px solid var(--border);position:relative;opacity:1;transform:translateY(0);transition:opacity .3s ease,transform .3s ease}
+.card.fade-out{opacity:0;transform:translateY(16px)}
+.card.fade-in{opacity:0;transform:translateY(-16px)}
+@media(max-width:480px){.card{padding:28px 20px 24px}}
+
+/* Step tag */
+.step-tag{display:inline-block;font-size:11px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--rose);margin-bottom:10px}
+.card h2{font-family:Georgia,serif;font-size:clamp(22px,4vw,28px);font-weight:700;line-height:1.25;color:var(--char);margin-bottom:8px}
+.card .sub{font-size:14px;color:var(--muted);line-height:1.6;margin-bottom:28px}
+
+/* ── LEAD FORM ── */
+.form-fields{display:flex;flex-direction:column;gap:14px;margin-bottom:24px}
+.form-field{display:flex;flex-direction:column;gap:6px}
+.form-field label{font-size:12px;font-weight:600;letter-spacing:.5px;color:rgba(28,22,34,.6);text-transform:uppercase}
+.form-field input{padding:13px 16px;border:1.5px solid var(--border);border-radius:10px;font-size:15px;color:var(--text);background:#faf9fb;outline:none;transition:border-color .2s,box-shadow .2s;font-family:inherit}
+.form-field input:focus{border-color:var(--rose-l);box-shadow:0 0 0 3px rgba(176,88,112,.1)}
+.form-field input::placeholder{color:rgba(28,22,34,.3)}
+
+/* ── OPTIONS ── */
+.options{display:flex;flex-direction:column;gap:10px;margin-bottom:28px}
+.opt{display:flex;align-items:center;gap:14px;padding:14px 18px;border:1.5px solid var(--border);border-radius:12px;cursor:pointer;transition:all .2s;background:#faf9fb;user-select:none}
+.opt:hover{border-color:var(--rose-l);background:rgba(176,88,112,.04)}
+.opt.selected{border-color:var(--rose);background:rgba(176,88,112,.08)}
+.opt-radio{width:20px;height:20px;border-radius:50%;border:2px solid rgba(44,34,52,.2);flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all .2s}
+.opt.selected .opt-radio{border-color:var(--rose);background:var(--rose)}
+.opt.selected .opt-radio::after{content:'';width:7px;height:7px;border-radius:50%;background:#fff}
+.opt-emoji{font-size:20px;flex-shrink:0;line-height:1}
+.opt-text{font-size:15px;color:var(--text);line-height:1.4}
+.opt-sub{font-size:12px;color:var(--muted);margin-top:2px}
+
+/* ── BUTTON ── */
+.btn{width:100%;padding:16px 24px;background:linear-gradient(135deg,var(--char),var(--char-l));color:#fff;border:none;border-radius:12px;font-size:16px;font-weight:700;cursor:pointer;font-family:inherit;transition:all .25s;display:flex;align-items:center;justify-content:center;gap:8px}
+.btn:hover{opacity:.9;transform:translateY(-1px);box-shadow:0 6px 24px rgba(44,34,52,.25)}
+.btn:disabled{opacity:.5;cursor:not-allowed;transform:none}
+.btn-rose{background:linear-gradient(135deg,var(--rose-d),var(--rose-l))}
+
+/* ── RESULT ── */
+.result-hero{text-align:center;padding-bottom:28px;border-bottom:1px solid var(--border);margin-bottom:28px}
+.result-emoji{font-size:48px;margin-bottom:12px}
+.result-hero h2{font-family:Georgia,serif;font-size:clamp(20px,4vw,26px);font-weight:700;color:var(--char);margin-bottom:8px}
+.result-hero p{font-size:14px;color:var(--muted);line-height:1.6}
+.result-savings{display:flex;align-items:center;justify-content:center;gap:8px;margin-top:16px;padding:12px 20px;background:rgba(176,88,112,.07);border-radius:12px;border:1px solid rgba(176,88,112,.2)}
+.savings-label{font-size:13px;color:var(--muted)}
+.savings-num{font-family:Georgia,serif;font-size:24px;font-weight:700;color:var(--rose-d)}
+
+.team-label{font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:14px}
+.team-grid{display:flex;flex-direction:column;gap:10px;margin-bottom:28px}
+.team-card{display:flex;align-items:flex-start;gap:14px;padding:14px 16px;background:#faf9fb;border-radius:12px;border:1px solid var(--border)}
+.team-icon{font-size:26px;flex-shrink:0;line-height:1;margin-top:2px}
+.team-info{}
+.team-name{font-size:14px;font-weight:700;color:var(--char);margin-bottom:3px}
+.team-desc{font-size:13px;color:var(--muted);line-height:1.5}
+.team-benefit{font-size:12px;font-weight:600;color:var(--rose-d);margin-top:4px}
+
+.result-cta-note{font-size:13px;color:var(--muted);text-align:center;margin-top:12px;line-height:1.5}
+.result-cta-note strong{color:var(--char)}
+
+/* ── NOTE UNDER CARD ── */
+.quiz-note{font-size:12px;color:rgba(44,34,52,.35);text-align:center;margin-top:16px;max-width:440px;line-height:1.6}
+</style>
+
+<!-- HEADER -->
+<div class="quiz-header">
+  <div class="quiz-brand">ИИ: КОД КОМАНДЫ</div>
+  <div class="progress-wrap">
+    <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+    <div class="progress-label" id="progressLabel">Шаг 0 / 5</div>
+  </div>
+</div>
+
+<!-- QUIZ CARD -->
+<div class="card" id="quizCard"></div>
+<div class="quiz-note" id="quizNote">Тест занимает 2 минуты. Результат — персональная ИИ-команда под ваши задачи.</div>
+
+<script>
+const STEPS = [
+  // Step 0 — lead form
+  { type: 'lead' },
+  // Step 1
+  {
+    type: 'question', key: 'role',
+    tag: 'Шаг 1 из 4',
+    q: 'Кто вы по роду деятельности?',
+    sub: 'Выберите то, что ближе всего к вашей ситуации',
+    options: [
+      { emoji:'💼', text:'Предприниматель', sub:'Есть бизнес или запускаю его', val:'entrepreneur' },
+      { emoji:'🎓', text:'Эксперт / коуч / консультант', sub:'Продаю знания и опыт', val:'expert' },
+      { emoji:'💻', text:'Фрилансер / самозанятый', sub:'Работаю на себя, продаю услуги', val:'freelancer' },
+      { emoji:'🏢', text:'Наёмный сотрудник', sub:'Работаю в компании', val:'employee' },
+    ]
+  },
+  // Step 2
+  {
+    type: 'question', key: 'pain',
+    tag: 'Шаг 2 из 4',
+    q: 'Что отнимает у вас больше всего времени?',
+    sub: 'Выберите главную «пожирательницу» вашего времени',
+    options: [
+      { emoji:'📣', text:'Маркетинг и контент', sub:'Посты, тексты, продвижение', val:'marketing' },
+      { emoji:'💬', text:'Работа с клиентами', sub:'Переписка, ответы, сопровождение', val:'clients' },
+      { emoji:'📋', text:'Планирование и анализ', sub:'Отчёты, стратегия, задачи', val:'planning' },
+      { emoji:'🌱', text:'Личная эффективность', sub:'Мотивация, цели, развитие', val:'personal' },
+    ]
+  },
+  // Step 3
+  {
+    type: 'question', key: 'goal',
+    tag: 'Шаг 3 из 4',
+    q: 'Чего вы хотите больше всего прямо сейчас?',
+    sub: 'Один честный ответ — самый важный',
+    options: [
+      { emoji:'💰', text:'Сэкономить на найме специалистов', sub:'Платить меньше, получать то же качество', val:'save' },
+      { emoji:'⏰', text:'Освободить время от рутины', sub:'Делать главное, остальное — автоматизировать', val:'time' },
+      { emoji:'🚀', text:'Масштабировать доход и бизнес', sub:'Расти быстрее, брать больше клиентов', val:'scale' },
+      { emoji:'😌', text:'Меньше работать и не выгорать', sub:'Баланс, восстановление, радость от дела', val:'balance' },
+    ]
+  },
+  // Step 4
+  {
+    type: 'question', key: 'exp',
+    tag: 'Шаг 4 из 4',
+    q: 'Ваш опыт с нейросетями?',
+    sub: 'Честно — это повлияет на подбор команды',
+    options: [
+      { emoji:'🙈', text:'Ни разу не пробовала', sub:'ИИ — это что-то страшное и непонятное', val:'zero' },
+      { emoji:'🤔', text:'Пробовала, но не прижилось', sub:'Казалось, это не для меня', val:'tried' },
+      { emoji:'✨', text:'Иногда пользуюсь', sub:'ChatGPT или другие — но без системы', val:'sometimes' },
+      { emoji:'⚡', text:'Использую регулярно', sub:'Хочу выстроить полноценную систему', val:'regular' },
+    ]
+  },
+  // Step 5 — result (generated dynamically)
+  { type: 'result' }
+];
+
+const ASSISTANTS = {
+  marketer:   { emoji:'🎯', name:'ИИ-маркетолог',     desc:'Разрабатывает стратегии, анализирует конкурентов, создаёт маркетинговые планы под вашу нишу' },
+  copywriter: { emoji:'✍️', name:'ИИ-копирайтер',     desc:'Пишет продающие тексты, посты, письма, скрипты — за минуты вместо часов' },
+  coach:      { emoji:'🌟', name:'ИИ-коуч',           desc:'Помогает ставить и декомпозировать цели, разбирает ограничивающие убеждения' },
+  psycho:     { emoji:'🧠', name:'ИИ-психолог',       desc:'Работает с тревогой, выгоранием и эмоциями — доступен в любое время дня и ночи' },
+  analyst:    { emoji:'📊', name:'ИИ-аналитик',       desc:'Анализирует данные, находит точки роста, готовит отчёты и прогнозы' },
+  smm:        { emoji:'📱', name:'ИИ-SMM-ассистент',  desc:'Создаёт контент-план, пишет посты, подбирает форматы и хэштеги' },
+  client:     { emoji:'💼', name:'ИИ-менеджер',       desc:'Обрабатывает запросы клиентов, составляет ответы, ведёт переписку' },
+  astro:      { emoji:'🌙', name:'ИИ-астролог',       desc:'Анализирует натальную карту, даёт рекомендации по благоприятным периодам для решений' },
+  selfdev:    { emoji:'📚', name:'ИИ-наставник',      desc:'Составляет персональные программы развития, подбирает книги и курсы по вашим целям' },
+};
+
+// Scoring: answers → assistant weights
+function calcTeam(answers) {
+  const score = {};
+  const add = (k, n) => score[k] = (score[k]||0) + n;
+
+  // Role
+  if (answers.role === 'entrepreneur') { add('marketer',3);add('analyst',2);add('client',2);add('copywriter',1); }
+  if (answers.role === 'expert')       { add('coach',3);add('copywriter',3);add('smm',2);add('psycho',1); }
+  if (answers.role === 'freelancer')   { add('copywriter',3);add('client',2);add('smm',2);add('marketer',1); }
+  if (answers.role === 'employee')     { add('coach',3);add('psycho',2);add('analyst',1);add('selfdev',2); }
+
+  // Pain
+  if (answers.pain === 'marketing')  { add('marketer',3);add('copywriter',2);add('smm',3); }
+  if (answers.pain === 'clients')    { add('client',3);add('copywriter',2);add('analyst',1); }
+  if (answers.pain === 'planning')   { add('analyst',3);add('coach',2);add('marketer',1); }
+  if (answers.pain === 'personal')   { add('coach',3);add('psycho',2);add('selfdev',2); }
+
+  // Goal
+  if (answers.goal === 'save')    { add('analyst',2);add('client',2);add('marketer',1); }
+  if (answers.goal === 'time')    { add('client',2);add('copywriter',2);add('smm',1); }
+  if (answers.goal === 'scale')   { add('marketer',3);add('analyst',2);add('smm',1); }
+  if (answers.goal === 'balance') { add('coach',2);add('psycho',3);add('selfdev',1); }
+
+  // Exp bonus
+  if (answers.exp === 'zero' || answers.exp === 'tried') { add('coach',1);add('selfdev',1); }
+  if (answers.exp === 'regular') { add('analyst',1);add('marketer',1); }
+
+  // Sort and pick top 4
+  return Object.entries(score).sort((a,b)=>b[1]-a[1]).slice(0,4).map(([k])=>k);
+}
+
+function calcSavings(answers) {
+  let base = 40000;
+  if (answers.role === 'entrepreneur') base = 80000;
+  if (answers.role === 'expert')       base = 60000;
+  if (answers.role === 'freelancer')   base = 40000;
+  if (answers.role === 'employee')     base = 30000;
+  if (answers.goal === 'scale')  base += 20000;
+  if (answers.goal === 'save')   base += 15000;
+  if (answers.pain === 'marketing') base += 10000;
+  return base;
+}
+
+function benefit(key, answers) {
+  const map = {
+    marketer:   'Заменит SMM-специалиста и маркетолога',
+    copywriter: 'Напишет месяц контента за 1 вечер',
+    coach:      'Поможет выйти из застревания и двигаться к целям',
+    psycho:     'Поддержит в трудный момент вместо дорогого психолога',
+    analyst:    'Даст чёткую картину: что работает, что нет',
+    smm:        'Закроет весь контент-план без агентства',
+    client:     'Освободит часы, которые уходят на переписку',
+    astro:      'Поможет выбрать лучший момент для важных решений',
+    selfdev:    'Составит план роста без дорогих коучей',
+  };
+  return map[key] || '';
+}
+
+// ──────────────────────────────────────────
+let currentStep = 0;
+const answers = {};
+let userName = '';
+
+function updateProgress() {
+  const total = STEPS.length - 1; // exclude result from count
+  const pct = currentStep === 0 ? 0 : Math.min((currentStep / (total-1)) * 100, 100);
+  document.getElementById('progressFill').style.width = pct + '%';
+  const isResult = currentStep === STEPS.length - 1;
+  document.getElementById('progressLabel').textContent = isResult ? 'Готово! 🎉' : `Шаг ${currentStep} / ${total-1}`;
+}
+
+function renderStep(stepIdx) {
+  const step = STEPS[stepIdx];
+  const card = document.getElementById('quizCard');
+  const note = document.getElementById('quizNote');
+
+  card.classList.add('fade-out');
+  setTimeout(() => {
+    card.innerHTML = '';
+    if (step.type === 'lead') renderLead(card);
+    else if (step.type === 'question') renderQuestion(card, step);
+    else if (step.type === 'result') renderResult(card);
+    note.style.display = stepIdx === 0 ? '' : 'none';
+    card.classList.remove('fade-out');
+    card.classList.add('fade-in');
+    requestAnimationFrame(() => {
+      card.classList.remove('fade-in');
+    });
+    updateProgress();
+  }, 280);
+}
+
+function renderLead(card) {
+  card.innerHTML = `
+    <div class="step-tag">С чего начнём</div>
+    <h2>Узнайте, какие ИИ-сотрудники нужны именно вам</h2>
+    <p class="sub">Пройдите 4 коротких вопроса и получите персональный подбор ИИ-команды — бесплатно.</p>
+    <div class="form-fields">
+      <div class="form-field">
+        <label>Ваше имя</label>
+        <input type="text" id="f-name" placeholder="Анна" autocomplete="given-name">
+      </div>
+      <div class="form-field">
+        <label>Телефон *</label>
+        <input type="tel" id="f-phone" placeholder="+7 900 000-00-00" autocomplete="tel">
+      </div>
+      <div class="form-field">
+        <label>Telegram *</label>
+        <input type="text" id="f-tg" placeholder="@username">
+      </div>
+    </div>
+    <button class="btn btn-rose" id="leadBtn" onclick="submitLead()">Начать тест →</button>
+  `;
+  const checkReady = () => {
+    const phone = document.getElementById('f-phone').value.trim();
+    const tg = document.getElementById('f-tg').value.trim();
+    document.getElementById('leadBtn').disabled = !(phone && tg);
+  };
+  document.getElementById('f-phone').addEventListener('input', checkReady);
+  document.getElementById('f-tg').addEventListener('input', checkReady);
+  document.getElementById('leadBtn').disabled = true;
+}
+
+function submitLead() {
+  const phone = document.getElementById('f-phone').value.trim();
+  if (!phone) return;
+  userName = document.getElementById('f-name').value.trim() || 'Участница';
+  answers._name = userName;
+  answers._phone = phone;
+  answers._tg = document.getElementById('f-tg').value.trim();
+  // Send lead to FormSubmit
+  fetch('https://formsubmit.co/ajax/gulevaanna1@gmail.com', {
+    method:'POST',
+    headers:{'Content-Type':'application/json','Accept':'application/json'},
+    body:JSON.stringify({name:userName, phone, telegram:answers._tg, source:'Тест ИИ-команды'})
+  }).catch(()=>{});
+  goNext();
+}
+
+function renderQuestion(card, step) {
+  card.innerHTML = `
+    <div class="step-tag">${step.tag}</div>
+    <h2>${step.q}</h2>
+    <p class="sub">${step.sub}</p>
+    <div class="options" id="opts"></div>
+    <button class="btn" id="nextBtn" disabled onclick="goNext()">Далее →</button>
+  `;
+  const opts = document.getElementById('opts');
+  step.options.forEach(o => {
+    const el = document.createElement('div');
+    el.className = 'opt';
+    el.innerHTML = `<div class="opt-radio"></div><div class="opt-emoji">${o.emoji}</div><div><div class="opt-text">${o.text}</div><div class="opt-sub">${o.sub}</div></div>`;
+    el.addEventListener('click', () => {
+      opts.querySelectorAll('.opt').forEach(x=>x.classList.remove('selected'));
+      el.classList.add('selected');
+      answers[step.key] = o.val;
+      document.getElementById('nextBtn').disabled = false;
+    });
+    opts.appendChild(el);
+  });
+}
+
+function renderResult(card) {
+  const team = calcTeam(answers);
+  const savings = calcSavings(answers);
+
+  card.innerHTML = `
+    <div class="result-hero">
+      <div class="result-emoji">🎉</div>
+      <h2>Персональная ИИ-команда для ${userName}</h2>
+      <p>На основе ваших ответов мы подобрали ассистентов, которые закроют именно ваши задачи</p>
+      <div class="result-savings">
+        <span class="savings-label">Потенциальная экономия:</span>
+        <span class="savings-num" id="savingsNum">0 ₽/мес</span>
+      </div>
+    </div>
+    <div class="team-label">Ваша ИИ-команда из ${team.length} ассистентов</div>
+    <div class="team-grid" id="teamGrid"></div>
+    <a href="https://vk.ru/club240415491" target="_blank" class="btn btn-rose" style="text-decoration:none">
+      Получить доступ к вводному модулю бесплатно →
+    </a>
+    <p class="result-cta-note">Вводный модуль покажет вам, как именно разговаривать с каждым из этих ассистентов.<br><strong>Первый шаг — бесплатно, без карты.</strong></p>
+  `;
+
+  // Animate savings counter
+  const el = document.getElementById('savingsNum');
+  let cur = 0; const step = Math.ceil(savings / 40);
+  const timer = setInterval(() => {
+    cur = Math.min(cur + step, savings);
+    el.textContent = cur.toLocaleString('ru-RU') + ' ₽/мес';
+    if (cur >= savings) clearInterval(timer);
+  }, 30);
+
+  // Render team cards
+  const grid = document.getElementById('teamGrid');
+  team.forEach((key, i) => {
+    const a = ASSISTANTS[key];
+    const card = document.createElement('div');
+    card.className = 'team-card';
+    card.style.opacity = '0';
+    card.style.transform = 'translateY(12px)';
+    card.style.transition = `opacity .35s ${i*0.1}s ease, transform .35s ${i*0.1}s ease`;
+    card.innerHTML = `
+      <div class="team-icon">${a.emoji}</div>
+      <div class="team-info">
+        <div class="team-name">${a.name}</div>
+        <div class="team-desc">${a.desc}</div>
+        <div class="team-benefit">→ ${benefit(key, answers)}</div>
+      </div>
+    `;
+    grid.appendChild(card);
+    requestAnimationFrame(() => requestAnimationFrame(() => {
+      card.style.opacity = '1';
+      card.style.transform = 'translateY(0)';
+    }));
+  });
+}
+
+function goNext() {
+  currentStep++;
+  renderStep(currentStep);
+}
+
+// Init
+renderStep(0);
+updateProgress();
+</script>
