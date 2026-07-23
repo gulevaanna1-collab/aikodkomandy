@@ -242,7 +242,7 @@ const lessons = [
   {
     title: 'Добро пожаловать на вводный модуль',
     duration: '18 мин',
-    vkUrl: 'https://vk.com/video_ext.php?oid=-240415491&id=456239017&list=ln-sijTBVWYYsvECkT4bn&hd=2',
+    vkUrl: 'https://vkvideo.ru/video-240415491_456239017?list=ln-sijTBVWYYsvECkT4bn',
     content: `
       <div class="highlight">Если вы здесь — вы приняли самое правильное решение в 2026 году!</div>
 
@@ -295,7 +295,7 @@ const lessons = [
   {
     title: 'Как устроен интенсив и кому он подходит',
     duration: '22 мин',
-    vkUrl: 'https://vk.com/video_ext.php?oid=-240415491&id=456239018&list=ln-JbH3grxQBxi7DL0xko&hd=2',
+    vkUrl: 'https://vkvideo.ru/video-240415491_456239018?list=ln-JbH3grxQBxi7DL0xko',
     content: `
       <p>Приветствую вас! Меня зовут Анна Ника Гулева. Я журналист и телеведущая, медиапродюсер, ИИ-интегратор. Автор первого в мире нейроромана «ИИ: Код нежности», основатель философии нейрогуманизма и Ассоциации гуманизации ИИ «Белое зеркало». Я выступала в Сколково, МФТИ, сотрудничаю с СНОБ и РБК.</p>
 
@@ -364,7 +364,7 @@ const lessons = [
   {
     title: 'Тарифы, организация и результаты участников',
     duration: '25 мин',
-    vkUrl: 'https://vk.com/video_ext.php?oid=-240415491&id=456239019&list=ln-nEtaZdTGFo5NnBr7yl&hd=2',
+    vkUrl: 'https://vkvideo.ru/video-240415491_456239019?list=ln-nEtaZdTGFo5NnBr7yl',
     content: `
       <p>Сегодня расскажу вам, что вас ждёт на интенсиве «ИИ: Код команды», как организовано обучение, чем отличаются тарифы и какой результат получают те, кто уже его прошёл.</p>
 
@@ -407,7 +407,7 @@ const lessons = [
 
       <p><strong>VIP</strong> — всё из «Сопровождения» + стратегическая сессия, личная стратегия внедрения ИИ под ваш проект, отдельный чат со мной и книга «ИИ: Код нежности» с автографом.</p>
 
-      <p>Актуальные тарифы со специальными ценами для участников вводного модуля — <a href="tariffs.html" target="_blank" style="color:var(--rose)">смотрите здесь</a>.</p>
+      <p>Актуальные тарифы со специальными ценами для участников вводного модуля — <a href="https://aikodkomandy.ru/#pricing" target="_blank" style="color:var(--rose)">смотрите здесь</a>.</p>
 
       <div class="highlight">Готовы перестать тащить всё на себе? Перейдите в чат предзаписи и напишите <strong>«ГОТОВ(А) ПРИСОЕДИНИТЬСЯ»</strong> — я дам всю информацию как начать. <a href="https://max.ru/join/j_WpmXzSg0-d_hXHKTwY-18wvFA0j8E2PUB2MSvsDjQ" target="_blank" style="color:var(--rose-d);font-weight:500">Перейти в чат →</a></div>
 
@@ -457,12 +457,17 @@ function openLesson(idx){
       <div class="l-meta-i">${isDone ? '✓ Пройден' : '○ Не пройден'}</div>
     </div>
     ${l.vkUrl
-      ? `<div class="video-block" style="cursor:default;padding:0">
-           <iframe src="${l.vkUrl}"
-             style="position:absolute;inset:0;width:100%;height:100%;border:none"
-             allow="autoplay; encrypted-media; fullscreen; picture-in-picture"
-             allowfullscreen></iframe>
-         </div>`
+      ? `<a href="${l.vkUrl}" target="_blank" style="text-decoration:none">
+           <div class="video-block">
+             <div class="video-bg">
+               <div class="video-play-btn">
+                 <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+               </div>
+               <div class="video-title-overlay">${l.title}</div>
+               <div class="video-dur" style="margin-top:8px;font-size:13px;color:rgba(255,255,255,.5)">▶ Смотреть урок во ВКонтакте</div>
+             </div>
+           </div>
+         </a>`
       : `<div class="video-block" onclick="this.querySelector('.video-play-btn').style.background='var(--rose)'">
            <div class="video-bg">
              <div class="video-play-btn">
@@ -490,7 +495,7 @@ function openLesson(idx){
          onmouseover="this.style.background='var(--rose-d)'" onmouseout="this.style.background='var(--charcoal)'">
         💬 Обсудить в чате предзаписи
       </a>
-      <a href="tariffs.html" target="_blank"
+      <a href="https://aikodkomandy.ru/#pricing" target="_blank"
          style="display:inline-flex;align-items:center;gap:8px;padding:12px 22px;background:transparent;color:var(--rose);border:1px solid rgba(168,80,104,.3);text-decoration:none;font-size:13px;font-weight:400;border-radius:2px;transition:all .2s;letter-spacing:.3px"
          onmouseover="this.style.borderColor='var(--rose)'" onmouseout="this.style.borderColor='rgba(168,80,104,.3)'">
         Посмотреть тарифы →
