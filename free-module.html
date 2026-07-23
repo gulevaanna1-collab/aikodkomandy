@@ -242,7 +242,7 @@ const lessons = [
   {
     title: 'Добро пожаловать на вводный модуль',
     duration: '18 мин',
-    vkUrl: 'https://vkvideo.ru/video-240415491_456239017?list=ln-sijTBVWYYsvECkT4bn',
+    rutubeUrl: 'https://rutube.ru/play/embed/091cf6f98592dfea364c4bfa5c01c8cc/?p=7jyrL9DSFYZXeFTiAHatjA',
     content: `
       <div class="highlight">Если вы здесь — вы приняли самое правильное решение в 2026 году!</div>
 
@@ -295,7 +295,7 @@ const lessons = [
   {
     title: 'Как устроен интенсив и кому он подходит',
     duration: '22 мин',
-    vkUrl: 'https://vkvideo.ru/video-240415491_456239018?list=ln-JbH3grxQBxi7DL0xko',
+    rutubeUrl: 'https://rutube.ru/play/embed/233e0a6111b6db3be8870b5330fa36a7/?p=jNEWH7kuwxJGTLDSeI3Dtg',
     content: `
       <p>Приветствую вас! Меня зовут Анна Ника Гулева. Я журналист и телеведущая, медиапродюсер, ИИ-интегратор. Автор первого в мире нейроромана «ИИ: Код нежности», основатель философии нейрогуманизма и Ассоциации гуманизации ИИ «Белое зеркало». Я выступала в Сколково, МФТИ, сотрудничаю с СНОБ и РБК.</p>
 
@@ -364,7 +364,7 @@ const lessons = [
   {
     title: 'Тарифы, организация и результаты участников',
     duration: '25 мин',
-    vkUrl: 'https://vkvideo.ru/video-240415491_456239019?list=ln-nEtaZdTGFo5NnBr7yl',
+    rutubeUrl: 'https://rutube.ru/play/embed/8130ff09d6e79f38f9d38572203514db/?p=lAX7Mf3pyK8QwN-rgqnskg',
     content: `
       <p>Сегодня расскажу вам, что вас ждёт на интенсиве «ИИ: Код команды», как организовано обучение, чем отличаются тарифы и какой результат получают те, кто уже его прошёл.</p>
 
@@ -456,18 +456,13 @@ function openLesson(idx){
       <div class="l-meta-i">⏱ ${l.duration}</div>
       <div class="l-meta-i">${isDone ? '✓ Пройден' : '○ Не пройден'}</div>
     </div>
-    ${l.vkUrl
-      ? `<a href="${l.vkUrl}" target="_blank" style="text-decoration:none">
-           <div class="video-block">
-             <div class="video-bg">
-               <div class="video-play-btn">
-                 <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-               </div>
-               <div class="video-title-overlay">${l.title}</div>
-               <div class="video-dur" style="margin-top:8px;font-size:13px;color:rgba(255,255,255,.5)">▶ Смотреть урок во ВКонтакте</div>
-             </div>
-           </div>
-         </a>`
+    ${l.rutubeUrl
+      ? `<div class="video-block" style="cursor:default;padding:0">
+           <iframe src="${l.rutubeUrl}"
+             style="position:absolute;inset:0;width:100%;height:100%;border:none"
+             allow="clipboard-write; autoplay; fullscreen; picture-in-picture"
+             allowfullscreen></iframe>
+         </div>`
       : `<div class="video-block" onclick="this.querySelector('.video-play-btn').style.background='var(--rose)'">
            <div class="video-bg">
              <div class="video-play-btn">
