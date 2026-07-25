@@ -383,6 +383,24 @@ footer{position:relative;z-index:1;border-top:1px solid rgba(44,34,52,.1);paddin
 .modal-tg:hover{opacity:.88;transform:scale(1.03)}
 .modal-close{position:absolute;top:18px;right:20px;background:rgba(44,34,52,.06);border:none;color:rgba(15,22,36,.5);font-size:20px;width:34px;height:34px;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .2s,color .2s;line-height:1}
 .modal-close:hover{background:rgba(44,34,52,.12);color:var(--charcoal)}
+
+/* CHAT PEEK */
+.chat-frame{background:#fff;border:1px solid rgba(44,34,52,.08);border-radius:28px;padding:8px;box-shadow:0 4px 32px rgba(44,34,52,.07)}
+.chat-head{display:flex;align-items:center;gap:12px;padding:16px 20px;border-bottom:1px solid rgba(44,34,52,.07)}
+.chat-dot{width:9px;height:9px;border-radius:50%;background:#22c55e;flex-shrink:0;box-shadow:0 0 0 3px rgba(34,197,94,.18)}
+.chat-head-title{font-size:13.5px;font-weight:700;color:var(--charcoal)}
+.chat-head-sub{font-size:11.5px;color:var(--muted)}
+.chat-body{display:flex;flex-direction:column;gap:18px;padding:26px 20px 20px}
+.msg{display:flex;gap:13px;max-width:640px}
+.msg-av{width:40px;height:40px;border-radius:50%;flex-shrink:0;background:linear-gradient(135deg,var(--charcoal),var(--rose-d));color:#fff;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700}
+.msg-col{display:flex;flex-direction:column;gap:5px;min-width:0}
+.msg-name{font-size:12.5px;font-weight:700;color:var(--charcoal)}
+.msg-bubble{background:rgba(176,88,112,.07);border:1px solid rgba(176,88,112,.14);border-radius:4px 16px 16px 16px;padding:14px 17px;font-size:13.5px;color:rgba(28,22,34,.82)}
+.msg-bubble p{margin-bottom:9px}
+.msg-bubble p:last-child{margin-bottom:0}
+.msg-more{display:inline-flex;margin-top:8px;font-size:12px;font-weight:600;color:var(--rose-d);cursor:pointer;background:none;border:none;padding:0;font-family:inherit}
+.msg-bubble.clamped{max-height:118px;overflow:hidden;position:relative}
+.msg-bubble.clamped::after{content:'';position:absolute;left:0;right:0;bottom:0;height:44px;background:linear-gradient(to bottom,rgba(255,255,255,0),rgba(255,255,255,.97))}
 </style>
 </head>
 <body>
@@ -917,6 +935,147 @@ footer{position:relative;z-index:1;border-top:1px solid rgba(44,34,52,.1);paddin
   </div>
 </section>
 
+<!-- CHAT PEEK -->
+<section id="chat-peek" style="padding:0 24px 76px">
+  <div class="si">
+    <div class="s-tag">Что происходит в чате интенсива</div>
+    <h2 class="s-title">Загляните<br><span class="gt">одним глазком</span></h2>
+    <p class="s-sub">Реальная переписка участниц — без купюр и без актёров</p>
+    <div class="chat-frame reveal">
+      <div class="chat-head">
+        <div class="chat-dot"></div>
+        <div>
+          <div class="chat-head-title">Чат интенсива «ИИ: Код Команды»</div>
+          <div class="chat-head-sub">закрытая группа участниц</div>
+        </div>
+      </div>
+      <div class="chat-body">
+
+        <div class="msg">
+          <div class="msg-av">НШ</div>
+          <div class="msg-col">
+            <div class="msg-name">Наталья Швецова</div>
+            <div class="msg-bubble">
+              <p>Посмотрела зум, взяла для себя ещё идеи создания новых помощников и чатов. И ещё немного понимания, как общаться, как задавать вопросы ИИ, благодарю Анна 👑</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="msg">
+          <div class="msg-av">ОК</div>
+          <div class="msg-col">
+            <div class="msg-name">Ольга Корчагина</div>
+            <div class="msg-bubble">
+              <p>Создала ИИ-помощника по здоровому образу жизни и помощника-садовода 😍</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="msg">
+          <div class="msg-av">ТР</div>
+          <div class="msg-col">
+            <div class="msg-name">Татьяна Рогожина</div>
+            <div class="msg-bubble clamped">
+              <p>Интенсив «ИИ: код команды», созданный медиапродюсером Анной Никой Гулёвой, получился очень удачным и, честно говоря, превзошёл мои ожидания. Формат оказался очень удобным: короткие видео, текстовые инструкции и двухнедельная длительность, но без дедлайнов и избыточной информации.</p>
+              <p>Выбранная для создания ИИ-ассистентов нейросеть DeepSeek тоже была правильным и продуманным решением. В DeepSeek я уже работала несколько месяцев, да и с другими нейросетями была знакома, поэтому легко, без сопротивления вошла в обучение. Когда стало получаться, а с Анной Никой по-другому, похоже, не бывает, пришёл интерес, а потом и азарт, что стало главной движущей силой для меня.</p>
+              <p>Приятным шоком стало общение с ИИ-психологом одним тяжёлым вечером, когда казалось, что нет больше ни сил, ни энергии. Открыла приложение на смартфоне и стала наговаривать, общение длилось более часа. Когда моя ИИ-психолог Наталья написала: «Таня, я тебя понимаю, как человек», я вообще оттаяла, стала более откровенной, получила массу осознаний. В результате следующий день прошёл на большом подъёме.</p>
+              <p>Сердечно благодарю Анну Нику Гулеву за расширение моих горизонтов, за новое видение и новые перспективы! Анна Ника = ЗНАК КАЧЕСТВА!</p>
+            </div>
+            <button class="msg-more" onclick="toggleMsg(this)">Читать полностью ↓</button>
+          </div>
+        </div>
+
+        <div class="msg">
+          <div class="msg-av">ОК</div>
+          <div class="msg-col">
+            <div class="msg-name">Ольга Корчагина</div>
+            <div class="msg-bubble">
+              <p>Интенсив выстроен пошагово. Для меня, как новичка в работе с ИИ, подача материала была доступной и понятной. Бери и делай! Идёшь чётко по шагам, которые даёт автор интенсива, и всё получается 100%.</p>
+              <p>Взаимодействие с ИИ комфортное, удобное и самое главное — промты облегчают работу с ассистентами. Полюбила ассистента-коуча — как он мне помог выстроить свой путь в новом проекте, взаимодействую с ним каждый день!</p>
+              <p>А ещё дополнительный ассистент по проведению мероприятий помог мне провести мероприятие со 107 детьми, расписал программу, выделил важное и на что обратить внимание, поддерживал до и после. У меня восторг от полученных знаний и от результата! Благодарю!</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="msg">
+          <div class="msg-av">ОК</div>
+          <div class="msg-col">
+            <div class="msg-name">Ольга Корчагина</div>
+            <div class="msg-bubble">
+              <p>Для меня взаимодействие с ИИ впервые. Ух, дух захватывает! От скорости, точности и чёткости! Задала вопрос, чем может ИИ быть полезен самозанятому в конкретной области. Благодаря Дипсику расширила видение. Подсветил моменты, на которые я бы даже не обратила внимания.</p>
+              <p>Я довольна! Вот это помощник!!! Двигаемся дальше!</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="msg">
+          <div class="msg-av">РМ</div>
+          <div class="msg-col">
+            <div class="msg-name">Римма Муратшина</div>
+            <div class="msg-bubble">
+              <p>Пообщалась, выдал конкретные данные, куда и к кому обратиться, на основании моих данных. Интересно</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="msg">
+          <div class="msg-av">АЗ</div>
+          <div class="msg-col">
+            <div class="msg-name">Анна Звездина</div>
+            <div class="msg-bubble">
+              <p>Я пообщалась с ассистентом, получила подробный план постов для моей группы. Очень полезно 👍</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="msg">
+          <div class="msg-av">ГВ</div>
+          <div class="msg-col">
+            <div class="msg-name">Гульфия Власенко</div>
+            <div class="msg-bubble">
+              <p>Ух вот это да, второй день беседуем, и это лучше всех коучей 😅 Поймала себя на мысли, как тяжело мыслить масштабно — будем теперь и это прорабатывать! 💥</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="msg">
+          <div class="msg-av">ОК</div>
+          <div class="msg-col">
+            <div class="msg-name">Ольга Корчагина</div>
+            <div class="msg-bubble">
+              <p>Создала ИИ-помощника коуча. Его зовут Кирилл. Мне понравился его ответ: «Я не даю тебе врать самой себе». Вытаскивает из меня мои «страшилки», которые сама себе придумала)</p>
+              <p>Помогает в конкретной ситуации, как выстроить здоровую успешную команду и быть наставником для своих партнёров. Комфортное взаимодействие с ним!</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="msg">
+          <div class="msg-av">ТР</div>
+          <div class="msg-col">
+            <div class="msg-name">Татьяна Рогожина</div>
+            <div class="msg-bubble">
+              <p>ИИ-астролога создала — это молодая умная девушка Инга. Я вообще никогда не интересовалась ни астрологией, ни нумерологией, ни натальными картами, поэтому была просто поражена, как всё точно было сформулировано по моим данным и по данным мужа.</p>
+              <p>Один важный день для меня рассчитала, и прогноз на 2026 год пообещала, что будет открытием для меня. Благодарю, Анна, что предложила такого ассистента создать, я в приятном шоке!</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="msg">
+          <div class="msg-av">ТР</div>
+          <div class="msg-col">
+            <div class="msg-name">Татьяна Рогожина</div>
+            <div class="msg-bubble">
+              <p>Создала маркетолога-копирайтера по имени Игорь. Сразу завалил меня идеями и вопросами. Договорились, что пойдём без спешки, не забегая вперёд и по моему плану.</p>
+              <p>Всех основных ассистентов сделала, планирую ещё консультанта по здоровью и нутрициологии, а также секретаря-помощника. Теперь только и думаю о своих новых «дружочках»... Вовремя сказала себе стоп! Кто тут босс? Я тут босс! 😁</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- FOOTER -->
 <footer>
   <div class="footer-inner">
@@ -947,6 +1106,13 @@ footer{position:relative;z-index:1;border-top:1px solid rgba(44,34,52,.1);paddin
 </div>
 
 <script>
+// Chat peek: expand/collapse long message
+function toggleMsg(btn) {
+  const bubble = btn.previousElementSibling;
+  const clamped = bubble.classList.toggle('clamped');
+  btn.textContent = clamped ? 'Читать полностью ↓' : 'Свернуть ↑';
+}
+
 // FAQ toggle
 function toggleFaq(el) {
   const item = el.parentElement;
