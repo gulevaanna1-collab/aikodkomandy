@@ -183,6 +183,9 @@ section{position:relative;z-index:1;padding:76px 24px}
 
 /* BENEFITS */
 .ben-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.ben-photo{border-radius:24px;overflow:hidden;margin:8px 0 36px;box-shadow:0 8px 40px rgba(44,34,52,.1)}
+.ben-photo img{width:100%;height:320px;object-fit:cover;display:block}
+@media(max-width:960px){.ben-photo img{height:220px}}
 .ben{background:#fff;border:1px solid rgba(44,34,52,.07);border-radius:24px;padding:30px;transition:all .3s;box-shadow:0 2px 12px rgba(44,34,52,.04)}
 .ben:hover{border-color:rgba(176,88,112,.3);transform:translateY(-4px);box-shadow:0 8px 28px rgba(44,34,52,.09)}
 .ben-icon{width:52px;height:52px;border-radius:14px;background:rgba(44,34,52,.08);border:1px solid rgba(44,34,52,.12);display:flex;align-items:center;justify-content:center;font-size:22px;margin-bottom:18px}
@@ -537,6 +540,7 @@ footer{position:relative;z-index:1;border-top:1px solid rgba(44,34,52,.1);paddin
     <div class="s-tag">Результаты, а не обещания</div>
     <h2 class="s-title">Что вы получите<br><span class="gt">на интенсиве</span></h2>
     <p class="s-sub">Не «знания», а работающая ИИ-команда, которая приносит результат с первого дня.</p>
+    <div class="ben-photo reveal"><img src="photo-benefits.png" alt="Внедряете ИИ-ассистентов в свою работу" loading="lazy"></div>
     <div class="ben-grid">
       <div class="ben reveal"><div class="ben-icon"><i data-lucide="bot"></i></div><h3>Готовую ИИ-команду из 10+ ассистентов</h3><p>Коуч, психолог, маркетолог, копирайтер, финансовый советник, бизнес-стратег, астролог, эксперт по здоровью и другие — под ваши задачи.</p></div>
       <div class="ben reveal"><div class="ben-icon"><i data-lucide="zap"></i></div><h3>Навык создать ассистента за 5 минут</h3><p>Без специальных технических знаний. Готовая пошаговая стратегия работы с ИИ и поддержка на каждом этапе.</p></div>
@@ -579,7 +583,7 @@ footer{position:relative;z-index:1;border-top:1px solid rgba(44,34,52,.1);paddin
   <div class="si">
     <div class="s-tag">Почему выбирают нас</div>
     <h2 class="s-title">3 ключевых<br><span class="gt">отличия</span></h2>
-    <p class="s-sub">Именно поэтому выпускники говорят: «Я опытный пользователь ИИ, но нашла новое».</p>
+    <p class="s-sub">Именно поэтому выпускники говорят: «Я уже пользовалась ИИ, но теперь владею системой работы».</p>
     <div class="reasons-grid">
       <div class="reason reveal">
         <div class="reason-n">01</div>
