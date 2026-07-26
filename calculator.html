@@ -13,7 +13,10 @@
 html,body{min-height:100vh;font-family:system-ui,-apple-system,sans-serif;background:var(--bg);color:var(--text)}
 body{display:flex;flex-direction:column;align-items:center;padding:0 16px 60px}
 
-.hdr{width:100%;max-width:680px;padding:28px 0 20px;text-align:center}
+.back-link{width:100%;max-width:680px;padding-top:20px;text-align:left}
+.back-link a{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:600;color:var(--muted);text-decoration:none;transition:color .15s}
+.back-link a:hover{color:var(--rose-d)}
+.hdr{width:100%;max-width:680px;padding:16px 0 20px;text-align:center}
 .hdr-brand{font-family:Georgia,serif;font-size:13px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--rose-d);margin-bottom:14px}
 .hdr h1{font-family:Georgia,serif;font-size:clamp(24px,4.5vw,34px);font-weight:700;color:var(--char);line-height:1.2;margin-bottom:10px}
 .hdr p{font-size:14.5px;color:var(--muted);max-width:480px;margin:0 auto;line-height:1.6}
@@ -53,6 +56,9 @@ body{display:flex;flex-direction:column;align-items:center;padding:0 16px 60px}
 }
 </style>
 
+<div class="back-link">
+  <a href="index.html">← Вернуться на сайт</a>
+</div>
 <div class="hdr">
   <div class="hdr-brand">ИИ: КОД КОМАНДЫ</div>
   <h1>Посчитайте свою экономию</h1>
