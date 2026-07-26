@@ -1,0 +1,140 @@
+<title>Калькулятор экономии — ИИ: КОД КОМАНДЫ</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Посчитайте, сколько вы сэкономите, заменив живых специалистов ИИ-ассистентами. Отметьте нужных — калькулятор покажет сумму.">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --rose:#B05870;--rose-d:#7C3450;--rose-l:#CC7A90;
+  --char:#2C2234;--char-l:#3F3050;
+  --bg:#F4F2F4;--white:#fff;
+  --text:#1C1622;--muted:rgba(28,22,34,.55);
+  --border:rgba(44,34,52,.1);
+}
+html,body{min-height:100vh;font-family:system-ui,-apple-system,sans-serif;background:var(--bg);color:var(--text)}
+body{display:flex;flex-direction:column;align-items:center;padding:0 16px 60px}
+
+.hdr{width:100%;max-width:680px;padding:28px 0 20px;text-align:center}
+.hdr-brand{font-family:Georgia,serif;font-size:13px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--rose-d);margin-bottom:14px}
+.hdr h1{font-family:Georgia,serif;font-size:clamp(24px,4.5vw,34px);font-weight:700;color:var(--char);line-height:1.2;margin-bottom:10px}
+.hdr p{font-size:14.5px;color:var(--muted);max-width:480px;margin:0 auto;line-height:1.6}
+
+.layout{width:100%;max-width:680px;display:flex;flex-direction:column;gap:16px}
+
+.list{background:var(--white);border-radius:24px;padding:14px;box-shadow:0 4px 32px rgba(44,34,52,.08);border:1px solid var(--border);display:flex;flex-direction:column;gap:8px}
+.item{display:flex;align-items:center;gap:14px;padding:14px 16px;border-radius:14px;cursor:pointer;transition:background .15s;user-select:none}
+.item:hover{background:rgba(176,88,112,.05)}
+.item input{width:20px;height:20px;flex-shrink:0;accent-color:var(--rose)}
+.item-emoji{font-size:22px;flex-shrink:0;line-height:1}
+.item-body{flex:1;min-width:0}
+.item-name{font-size:14.5px;font-weight:600;color:var(--char)}
+.item-desc{font-size:12px;color:var(--muted);margin-top:1px}
+.item-price{font-size:13.5px;font-weight:700;color:var(--rose-d);white-space:nowrap;flex-shrink:0}
+
+.result{position:sticky;bottom:16px;background:var(--char);color:#fff;border-radius:20px;padding:22px 24px;box-shadow:0 8px 32px rgba(44,34,52,.35)}
+.result-row{display:flex;justify-content:space-between;align-items:baseline;gap:12px;margin-bottom:8px}
+.result-row:last-of-type{margin-bottom:0}
+.result-label{font-size:13px;color:rgba(255,255,255,.6)}
+.result-num{font-family:Georgia,serif;font-size:20px;font-weight:700;white-space:nowrap}
+.result-num.hire{color:#f3a0ae}
+.result-num.save{color:#7fe0a8;font-size:26px}
+.result-div{height:1px;background:rgba(255,255,255,.12);margin:14px 0}
+.result-note{font-size:11.5px;color:rgba(255,255,255,.45);margin-top:10px;line-height:1.5}
+
+.btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:16px 24px;background:linear-gradient(135deg,var(--rose-d),var(--rose-l));color:#fff;border:none;border-radius:12px;font-size:16px;font-weight:700;cursor:pointer;font-family:inherit;text-decoration:none;margin-top:16px;transition:all .25s}
+.btn:hover{opacity:.92;transform:translateY(-1px);box-shadow:0 6px 24px rgba(176,88,112,.35)}
+
+.foot-note{font-size:12px;color:rgba(44,34,52,.35);text-align:center;margin-top:18px;max-width:480px;line-height:1.6}
+
+@media(max-width:480px){
+  .list{padding:10px}
+  .item{padding:12px}
+  .item-price{font-size:12.5px}
+  .result{padding:18px}
+}
+</style>
+
+<div class="hdr">
+  <div class="hdr-brand">ИИ: КОД КОМАНДЫ</div>
+  <h1>Посчитайте свою экономию</h1>
+  <p>Отметьте, каких специалистов вы бы наняли или уже нанимаете — калькулятор покажет, сколько вы сэкономите на ИИ-ассистентах.</p>
+</div>
+
+<div class="layout">
+  <div class="list" id="list"></div>
+
+  <div class="result">
+    <div class="result-row">
+      <span class="result-label">Живые специалисты в месяц</span>
+      <span class="result-num hire" id="hireTotal">0 ₽</span>
+    </div>
+    <div class="result-row">
+      <span class="result-label">Интенсив «ИИ: Код Команды»</span>
+      <span class="result-num" id="priceTotal" style="color:rgba(255,255,255,.85)">от 15 900 ₽ разово</span>
+    </div>
+    <div class="result-div"></div>
+    <div class="result-row">
+      <span class="result-label">Ваша экономия в месяц</span>
+      <span class="result-num save" id="saveMonth">0 ₽</span>
+    </div>
+    <div class="result-row">
+      <span class="result-label">Экономия в год</span>
+      <span class="result-num save" id="saveYear" style="font-size:16px">0 ₽</span>
+    </div>
+    <a href="index.html#anketa" class="btn">Записаться на интенсив →</a>
+    <div class="result-note">Суммы — по среднерыночным ценам на услуги фрилансеров и специалистов. Ваша реальная экономия может быть выше.</div>
+  </div>
+</div>
+
+<div class="foot-note">Не то ищете? Пройдите <a href="quiz.html" style="color:var(--rose-d)">тест с подбором команды</a> или сразу <a href="free-module.html" style="color:var(--rose-d)">попробуйте бесплатный вводный модуль</a>.</div>
+
+<script>
+const ITEMS = [
+  { key:'smm',      emoji:'📣', name:'СММ-специалист',        desc:'Ведение соцсетей, контент-план',        price:30000, checked:true },
+  { key:'marketer',  emoji:'🎯', name:'Маркетолог',            desc:'Стратегия, реклама, аналитика',          price:50000, checked:true },
+  { key:'copy',      emoji:'✍️', name:'Копирайтер',             desc:'Тексты, посты, продающие письма',        price:30000, checked:true },
+  { key:'coach',     emoji:'🌟', name:'Коуч',                  desc:'Постановка и достижение целей',          price:50000, checked:true },
+  { key:'psycho',    emoji:'🧠', name:'Психолог',               desc:'Поддержка, работа с тревогой и выгоранием', price:20000, checked:true },
+  { key:'strategist',emoji:'💼', name:'Бизнес-стратег',        desc:'Развитие бизнеса, новые направления',    price:60000, checked:false },
+  { key:'finance',   emoji:'📈', name:'Финансовый советник',   desc:'Учёт, планирование бюджета',             price:40000, checked:false },
+  { key:'planner',   emoji:'📅', name:'Ассистент по планированию', desc:'Расписание, задачи, напоминания',    price:35000, checked:false },
+  { key:'client',    emoji:'✉️', name:'Ассистент по переписке', desc:'Ответы клиентам, ведение диалогов',     price:30000, checked:false },
+  { key:'health',    emoji:'🩺', name:'Эксперт по здоровью',   desc:'Нутрициолог, консультации по ЗОЖ',       price:15000, checked:false },
+  { key:'astro',     emoji:'🌙', name:'Астролог',              desc:'Разбор натальной карты, прогнозы',       price:10000, checked:false },
+];
+
+const INTENSIVE_PRICE = 15900;
+
+const list = document.getElementById('list');
+ITEMS.forEach(item => {
+  const row = document.createElement('label');
+  row.className = 'item';
+  row.innerHTML = `
+    <input type="checkbox" data-key="${item.key}" ${item.checked ? 'checked' : ''}>
+    <div class="item-emoji">${item.emoji}</div>
+    <div class="item-body">
+      <div class="item-name">${item.name}</div>
+      <div class="item-desc">${item.desc}</div>
+    </div>
+    <div class="item-price">${item.price.toLocaleString('ru-RU')} ₽/мес</div>
+  `;
+  list.appendChild(row);
+});
+
+function recalc(){
+  let total = 0;
+  document.querySelectorAll('#list input[type=checkbox]').forEach(cb => {
+    if(cb.checked){
+      const item = ITEMS.find(i => i.key === cb.dataset.key);
+      if(item) total += item.price;
+    }
+  });
+  const saveMonth = Math.max(total - 0, 0); // intensive is one-time, so full monthly hire cost is saved every month after
+  const saveYear = saveMonth * 12;
+  document.getElementById('hireTotal').textContent = total.toLocaleString('ru-RU') + ' ₽';
+  document.getElementById('saveMonth').textContent = (saveMonth > 0 ? saveMonth.toLocaleString('ru-RU') + ' ₽' : '0 ₽');
+  document.getElementById('saveYear').textContent = (saveYear > 0 ? saveYear.toLocaleString('ru-RU') + ' ₽' : '0 ₽');
+}
+
+list.addEventListener('change', recalc);
+recalc();
+</script>
