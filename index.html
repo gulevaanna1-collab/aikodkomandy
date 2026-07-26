@@ -9,13 +9,15 @@
 <meta name="author" content="Анна Ника Гулева">
 <meta name="robots" content="index, follow">
 <link rel="canonical" href="https://aikodkomandy.ru/">
+<link rel="icon" type="image/png" href="logo-round.png">
+<link rel="apple-touch-icon" href="logo-round.png">
 
 <!-- Open Graph (ВКонтакте, Telegram превью) -->
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://aikodkomandy.ru/">
 <meta property="og:title" content="ИИ: КОД КОМАНДЫ — Собери ИИ-команду за 2 недели | Анна Ника Гулева">
 <meta property="og:description" content="Обучение ИИ и нейросетям для предпринимателей. Без VPN, без платных подписок, работает в России. Создай команду из 10+ ИИ-ассистентов — экономь от 50 000 ₽ в месяц.">
-<meta property="og:image" content="https://aikodkomandy.ru/photo-hero.jpg">
+<meta property="og:image" content="https://aikodkomandy.ru/hero-robots.png">
 <meta property="og:locale" content="ru_RU">
 <meta property="og:site_name" content="ИИ: КОД КОМАНДЫ">
 
@@ -23,7 +25,7 @@
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="ИИ: КОД КОМАНДЫ — Анна Ника Гулева">
 <meta name="twitter:description" content="Собери команду из 10+ ИИ-ассистентов за 2 недели. Без VPN, без платных подписок.">
-<meta name="twitter:image" content="https://aikodkomandy.ru/photo-hero.jpg">
+<meta name="twitter:image" content="https://aikodkomandy.ru/hero-robots.png">
 
 <!-- JSON-LD структурированные данные для Google -->
 <script type="application/ld+json">
@@ -268,6 +270,17 @@ section{position:relative;z-index:1;padding:76px 24px}
 .btn-prc.gh:hover{background:rgba(44,34,52,.05);border-color:var(--charcoal)}
 .p-access{text-align:center;margin-top:10px;font-size:11px;color:var(--muted)}
 
+/* TEAM PHOTO */
+.team-photo-wrap{display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:center}
+.team-photo-img{border-radius:24px;overflow:hidden;box-shadow:0 8px 40px rgba(44,34,52,.12)}
+.team-photo-img img{width:100%;height:420px;object-fit:cover;display:block}
+.team-photo-text h2{font-family:'Unbounded',sans-serif;font-size:clamp(22px,3vw,32px);font-weight:900;margin-bottom:14px;line-height:1.15;color:var(--charcoal)}
+.team-photo-text p{font-size:15px;color:var(--muted);line-height:1.75;margin-bottom:20px}
+@media(max-width:960px){
+  .team-photo-wrap{grid-template-columns:1fr;gap:28px}
+  .team-photo-img img{height:280px}
+}
+
 /* FREE MODULE */
 .free-wrap{background:linear-gradient(135deg,rgba(176,88,112,.08),rgba(44,34,52,.04));border:1px solid rgba(176,88,112,.22);border-radius:30px;padding:56px 52px;display:grid;grid-template-columns:1fr auto;gap:44px;align-items:center;box-shadow:0 2px 20px rgba(176,88,112,.08)}
 .free-tag{display:inline-block;background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.25);color:#16a34a;font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;padding:5px 14px;border-radius:100px;margin-bottom:14px}
@@ -318,7 +331,9 @@ footer{position:relative;z-index:1;border-top:1px solid rgba(44,34,52,.1);paddin
 /* RESPONSIVE */
 @media(max-width:960px){
   .hero-inner{grid-template-columns:1fr}
-  .hero-visual{display:none}
+  .hero-visual{display:flex;margin-top:12px}
+  .hero-photo{width:100%;max-width:360px;height:340px}
+  .float-card{display:none}
   .stats-inner{grid-template-columns:repeat(2,1fr)}
   .pain-grid{grid-template-columns:1fr}
   .ben-grid{grid-template-columns:repeat(2,1fr)}
@@ -428,7 +443,7 @@ footer{position:relative;z-index:1;border-top:1px solid rgba(44,34,52,.1);paddin
 
 <!-- NAV -->
 <nav>
-  <div class="nav-logo">ИИ: КОД КОМАНДЫ</div>
+  <div class="nav-logo"><img src="logo-square.png" alt="" style="width:26px;height:26px;border-radius:6px;vertical-align:-7px;margin-right:8px">ИИ: КОД КОМАНДЫ</div>
   <ul class="nav-links">
     <li><a href="#about">О программе</a></li>
     <li><a href="#benefits">Результаты</a></li>
@@ -460,7 +475,7 @@ footer{position:relative;z-index:1;border-top:1px solid rgba(44,34,52,.1);paddin
     </div>
     <div class="hero-visual">
       <div class="hero-photo">
-        <img src="photo-hero.jpg" alt="Анна Ника Гулева — эксперт по ИИ">
+        <img src="hero-robots.png" alt="Анна Ника Гулева и ИИ-команда — ИИ: Код Команды">
         <div class="hero-photo-ov"></div>
       </div>
       <div class="float-card float-card-1">
@@ -833,6 +848,23 @@ footer{position:relative;z-index:1;border-top:1px solid rgba(44,34,52,.1);paddin
       <div class="ok-icon"><i data-lucide="check"></i></div>
       <h3>Анкета отправлена!</h3>
       <p>Я свяжусь с вами лично<br>в течение 24 часов</p>
+    </div>
+  </div>
+</section>
+
+<!-- TEAM PHOTO -->
+<section style="padding:0 24px 76px">
+  <div class="si">
+    <div class="team-photo-wrap reveal">
+      <div class="team-photo-text">
+        <div class="s-tag" style="margin-bottom:4px">Учитесь в своём темпе</div>
+        <h2>20 минут в день —<br>хоть дома, хоть в кафе</h2>
+        <p>Никаких вебинаров по расписанию и обязательного присутствия. Смотрите короткие видео и создавайте ассистентов тогда, когда удобно вам — с телефона или ноутбука, из дома, кафе или в перерыве на работе.</p>
+        <a href="#anketa" class="btn-p">Записаться на интенсив →</a>
+      </div>
+      <div class="team-photo-img">
+        <img src="photo-team.jpg" alt="Обучение ИИ: Код Команды — учитесь где угодно" loading="lazy">
+      </div>
     </div>
   </div>
 </section>
