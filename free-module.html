@@ -540,17 +540,18 @@ document.getElementById('regForm').addEventListener('submit', async function(e){
   const email = document.getElementById('fEmail').value;
 
   try {
-    await fetch('https://formsubmit.co/ajax/a.guleva@yandex.ru', {
+    const res = await fetch('https://lhdwobpsuithbdxvrwkx.supabase.co/functions/v1/contact', {
       method: 'POST',
-      headers: {'Content-Type': 'application/json', 'Accept': 'application/json'},
+      headers: {'Content-Type': 'application/json'},
       body: JSON.stringify({
         _subject: 'Новая регистрация на бесплатный модуль — ' + name,
-        Имя:    name,
-        Email:  email,
-        _template: 'table'
+        name: name,
+        email: email
       })
     });
-  } catch(err) {}
+    const data = await res.json();
+    if (!data.ok) console.error('contact form error', data);
+  } catch(err) { console.error(err); }
 
   // Сохраняем имя
   userName = document.getElementById('fName').value || 'Ученик';

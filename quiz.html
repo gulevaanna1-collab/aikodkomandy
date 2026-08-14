@@ -296,11 +296,11 @@ function submitLead() {
   answers._name = userName;
   answers._phone = phone;
   answers._tg = document.getElementById('f-tg').value.trim();
-  // Send lead to FormSubmit
-  fetch('https://formsubmit.co/ajax/gulevaanna1@gmail.com', {
+  // Send lead to contact function
+  fetch('https://lhdwobpsuithbdxvrwkx.supabase.co/functions/v1/contact', {
     method:'POST',
-    headers:{'Content-Type':'application/json','Accept':'application/json'},
-    body:JSON.stringify({name:userName, phone, telegram:answers._tg, source:'Тест ИИ-команды'})
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({_subject:'Новая заявка — Тест ИИ-команды', name:userName, phone, telegram:answers._tg})
   }).catch(()=>{});
   goNext();
 }

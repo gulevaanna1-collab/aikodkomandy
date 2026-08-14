@@ -1232,12 +1232,15 @@ if (anketaForm) {
     btn.textContent = 'Отправляем...';
     btn.disabled = true;
     try {
-      const res = await fetch('https://formsubmit.co/ajax/a.guleva@yandex.ru', {
+      const body = Object.fromEntries(new FormData(anketaForm));
+      body._subject = 'Новая заявка — ИИ: Код Команды';
+      const res = await fetch('https://lhdwobpsuithbdxvrwkx.supabase.co/functions/v1/contact', {
         method: 'POST',
-        headers: {'Content-Type': 'application/json', 'Accept': 'application/json'},
-        body: JSON.stringify(Object.fromEntries(new FormData(anketaForm)))
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(body)
       });
-      if (res.ok) {
+      const data = await res.json();
+      if (data.ok) {
         anketaForm.style.display = 'none';
         document.getElementById('thanksModal').classList.add('show');
         lucide.createIcons();
