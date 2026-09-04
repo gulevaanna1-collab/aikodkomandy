@@ -122,6 +122,7 @@ nav{position:fixed;top:14px;left:50%;transform:translateX(-50%);width:calc(100% 
 .hero{min-height:100vh;display:flex;align-items:center;padding:130px 24px 80px;position:relative;z-index:1}
 .hero-inner{max-width:1180px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:center;width:100%}
 .hero-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(176,88,112,.12);border:1px solid rgba(176,88,112,.4);border-radius:100px;padding:6px 16px;font-size:12px;color:var(--rose-d);font-weight:600;margin-bottom:22px;letter-spacing:.5px}
+.hero-tagline{display:block;font-family:'Unbounded',sans-serif;font-size:clamp(20px,2.6vw,32px);font-weight:900;line-height:1.2;letter-spacing:-.5px;margin-bottom:18px;background:linear-gradient(135deg,var(--rose-d) 15%,var(--rose-l) 85%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
 .hero-badge-dot{width:7px;height:7px;background:var(--rose);border-radius:50%;animation:pulse 2s infinite}
 @keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.7)}}
 .hero h1{font-family:'Unbounded',sans-serif;font-size:clamp(38px,5vw,66px);font-weight:900;line-height:1.05;margin-bottom:24px;letter-spacing:-1.5px;color:var(--charcoal)}
@@ -397,6 +398,10 @@ footer{position:relative;z-index:1;border-top:1px solid rgba(44,34,52,.1);paddin
 .modal-title{font-family:'Unbounded',sans-serif;font-size:22px;font-weight:900;color:var(--charcoal);margin-bottom:12px;line-height:1.2}
 .modal-text{font-size:15px;color:var(--muted);line-height:1.7;margin-bottom:26px}
 .modal-tg{display:inline-flex;align-items:center;gap:9px;background:linear-gradient(135deg,var(--charcoal),var(--charcoal-l));color:#fff;font-size:15px;font-weight:700;padding:14px 28px;border-radius:100px;text-decoration:none;transition:opacity .25s,transform .2s}
+.modal-gift{background:rgba(176,88,112,.08);border:1.5px solid rgba(176,88,112,.3);border-radius:18px;padding:22px 24px;margin-bottom:8px}
+.modal-gift-label{font-family:'Unbounded',sans-serif;font-size:13px;font-weight:900;color:var(--rose-d);letter-spacing:.3px;margin-bottom:10px}
+.modal-gift-text{font-size:14.5px;color:var(--charcoal);line-height:1.5;font-weight:600;margin-bottom:18px}
+.modal-gift .modal-tg{background:linear-gradient(135deg,var(--rose-d),var(--rose-l));font-size:14px;padding:12px 24px}
 .modal-tg:hover{opacity:.88;transform:scale(1.03)}
 .modal-close{position:absolute;top:18px;right:20px;background:rgba(44,34,52,.06);border:none;color:rgba(15,22,36,.5);font-size:20px;width:34px;height:34px;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .2s,color .2s;line-height:1}
 .modal-close:hover{background:rgba(44,34,52,.12);color:var(--charcoal)}
@@ -462,6 +467,7 @@ footer{position:relative;z-index:1;border-top:1px solid rgba(44,34,52,.1);paddin
   <div class="hero-inner">
     <div>
       <div class="hero-badge"><span class="hero-badge-dot"></span> Следующий поток стартует через 7 дней — успей присоединиться к группе</div>
+      <div class="hero-tagline">ИИ: ЛЁГКИЙ СТАРТ &amp; СИСТЕМНАЯ РАБОТА</div>
       <h1>Собери команду<br>из 10+ <em>ИИ-ассистентов</em><br>за 2 недели</h1>
       <p class="hero-sub">Без VPN, без платных подписок, без технических знаний. Работает в России. Экономь от <strong>50 000 ₽</strong> в месяц на найме живых специалистов.</p>
       <div class="ctas">
@@ -1179,7 +1185,13 @@ footer{position:relative;z-index:1;border-top:1px solid rgba(44,34,52,.1);paddin
     <button class="modal-close" onclick="closeModal()" aria-label="Закрыть">×</button>
     <div class="modal-check"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
     <div class="modal-title" id="modalTitle">Спасибо!</div>
-    <p class="modal-text">Мы ответим вам в ближайшее время.<br><br>Пока вы можете подписаться на канал Анны Ники в Telegram — там новости, полезные материалы и анонсы потоков.</p>
+    <p class="modal-text">Мы ответим вам в ближайшее время.</p>
+    <div class="modal-gift">
+      <div class="modal-gift-label">🎁 Получите свой подарок</div>
+      <div class="modal-gift-text">Чек-лист «Как распаковать свою уникальность с помощью ИИ. 10 важных промтов»</div>
+      <a href="https://t.me/+aZddSgTmkrwxM2Vi" target="_blank" class="modal-tg">Забрать подарок →</a>
+    </div>
+    <p class="modal-text" style="margin-top:22px;margin-bottom:14px">Пока вы можете подписаться на канал Анны Ники в Telegram — там новости, полезные материалы и анонсы потоков.</p>
     <a href="https://t.me/annanika_life" target="_blank" class="modal-tg">Подписаться на канал →</a>
   </div>
 </div>
